@@ -27,13 +27,21 @@ public class Main
 				expand(current);
 				useds.add(current);				
 			}
+			else break;
+			
 			current = queue.remove(queue.size() - 1);
 		}
 		
-		System.out.println("SOLUÇÃO:");
-		Help.printSolution(current);
-		System.out.println("FIM DA SOLUÇÃO!");
-		
+		if(Help.usedBefore(current.puzzle))
+		{
+			System.out.println("Não achei solução");
+		}
+		else
+		{
+			System.out.println("SOLUÇÃO:");
+			Help.printSolution(current);
+			System.out.println("FIM DA SOLUÇÃO!");
+		}
 	}
 
 	private static void expand(Quadrant current)
@@ -72,18 +80,10 @@ public class Main
 
 		// 2 - compare possibilities with target. count tired of each one
 		List<Integer> tireds = new ArrayList<Integer>();
-		
-		if(Help.containsValidValues(one))
-			tireds.add(Help.getTired(one));
-		
-		if(Help.containsValidValues(two))
-			tireds.add(Help.getTired(two));
-		
-		if(Help.containsValidValues(three))
-			tireds.add(Help.getTired(three));
-		
-		if(Help.containsValidValues(four))
-			tireds.add(Help.getTired(four));
+		tireds.add(Help.getTired(one));
+		tireds.add(Help.getTired(two));
+		tireds.add(Help.getTired(three));
+		tireds.add(Help.getTired(four));
 		
 		// 3 - choose the best shot
 		int min = Collections.min(tireds); //menor esforço

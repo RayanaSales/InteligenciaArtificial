@@ -69,19 +69,19 @@ public class Help
 		}
 	}
 	
-	protected static boolean containsValidValues(int[][] puzzle)
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if(puzzle[i][j] != 0 && puzzle[i][j] <= 8){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+//	protected static boolean containsValidValues(int[][] puzzle)
+//	{
+//		for (int i = 0; i < 3; i++)
+//		{
+//			for (int j = 0; j < 3; j++)
+//			{
+//				if(puzzle[i][j] != 0 && puzzle[i][j] <= 8){
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 	
 	protected static int getTired(int[][] puzzle) //quantas trocas tem que fazer para chegar no objetivo?
 	{
