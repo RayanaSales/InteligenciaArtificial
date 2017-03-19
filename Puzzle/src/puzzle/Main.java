@@ -3,7 +3,6 @@ package puzzle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main
 {
@@ -16,49 +15,25 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		Quadrant current;
-		Quadrant head = new Quadrant(getUserPuzzle(), null, null);
-
-		queue.add(head);
-		do
+		Quadrant head = new Quadrant(Help.getUserPuzzle(), null, null);
+		queue.add(head);	
+		
+		Quadrant current = queue.remove(queue.size() - 1);
+		
+		while( !Help.similars(current.puzzle, PUZZLE_TARGET) )
 		{
-			current = queue.remove(queue.size() - 1);
-
-			if (similars(current.next.puzzle, PUZZLE_TARGET) == false && !useds.contains(current))
+			if (!Help.usedBefore(current.puzzle))
 			{
 				expand(current);
-				useds.add(current);
+				useds.add(current);				
 			}
-
-		} while (similars(current.next.puzzle, PUZZLE_TARGET) == true || queue.isEmpty());
+			current = queue.remove(queue.size() - 1);
+		}
 		
-		if(queue.isEmpty()){
-			System.out.println("Não achei solução!!!");
-		}
-		else{
-			System.out.println("SOLUÇÃO:");
-			printSolution(current);
-			System.out.println("FIM DA SOLUÇÃO!");
-		}
-	}
-
-	private static int[][] getUserPuzzle()
-	{
-		int[][] puzzle = new int[3][3];
-		Scanner input = new Scanner(System.in);
-
-		System.out.println("Insira os valores da sua matriz. obs: x = 0");
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				puzzle[i][j] = input.nextInt();
-			}
-			System.out.println();
-		}
-
-		input.close();
-		return puzzle;
+		System.out.println("SOLUÇÃO:");
+		Help.printSolution(current);
+		System.out.println("FIM DA SOLUÇÃO!");
+		
 	}
 
 	private static void expand(Quadrant current)
@@ -73,83 +48,60 @@ public class Main
 
 	private static int[][] getBestShot(int[][] puzzle)
 	{
-		//moviments
+		//possible moviments (max = 4)
 		int[][] one = new int[3][3];
 		int[][] two = new int[3][3];
 		int[][] three = new int[3][3];
 		int[][] four = new int[3][3];
-
-		// 1 - check possibilities (max = 4)
-		/*
-		 * 1.1 - find x 
-		 * 1.2 - move up? one = move 
-		 * 1.3 - move down? two = move
-		 * 1.4 - move right? three = move 
-		 * 1.5 - move left? four = move
-		 */
-
-		// 1.1 - find x
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if (puzzle[i][j] == 0)
-				{
-					COORDINATE_X_I = i;
-					COORDINATE_X_J = j;
-					break;
-				}
-			}
-		}
-
-		//moviments
-		if (validateMove(Move.UP))
-		{
-			one = swap(Move.UP, puzzle);
-		}
-
-		if (validateMove(Move.RIGHT))
-		{
-			two = swap(Move.RIGHT, puzzle);
-		}
 		
-		if (validateMove(Move.DOWN))
-		{
+		// 1.1 - find x
+		Help.findX(puzzle);
+
+		// 1.2 - swap if you can
+		if (validateMove(Move.UP))		
+			one = swap(Move.UP, puzzle);
+
+		if (validateMove(Move.RIGHT))		
+			two = swap(Move.RIGHT, puzzle);
+		
+		if (validateMove(Move.DOWN))		
 			three = swap(Move.DOWN, puzzle);
-		}
 		
 		if (validateMove(Move.LEFT))
-		{
 			four = swap(Move.LEFT, puzzle);
-		}
 
-		// 2 - compare possibilities with target. count tired
+		// 2 - compare possibilities with target. count tired of each one
 		List<Integer> tireds = new ArrayList<Integer>();
-		tireds.add(getTired(one));
-		tireds.add(getTired(two));
-		tireds.add(getTired(three));
-		tireds.add(getTired(four));
 		
+		if(Help.containsValidValues(one))
+			tireds.add(Help.getTired(one));
+		
+		if(Help.containsValidValues(two))
+			tireds.add(Help.getTired(two));
+		
+		if(Help.containsValidValues(three))
+			tireds.add(Help.getTired(three));
+		
+		if(Help.containsValidValues(four))
+			tireds.add(Help.getTired(four));
+		
+		// 3 - choose the best shot
 		int min = Collections.min(tireds); //menor esforço
 		int indexOfBestShot = tireds.indexOf(min); //pegar o index doq elemento que gasta menos esforço.
 		
-		// 3 - give your best shot 
-		if(indexOfBestShot == 0){
-			return one;
+		switch (indexOfBestShot)
+		{
+			case 0:
+				return one;				
+			case 1:
+				return two;
+			case 2:
+				return three;
+			case 3:
+				return four;
+			default:
+				return null;			
 		}
-		
-		else if(indexOfBestShot == 1){
-			return two;
-		}
-		
-		else if(indexOfBestShot == 2){
-			return three;
-		}
-		
-		else if(indexOfBestShot == 3){
-			return four;
-		}
-		else return null;
 	}
 
 	private static boolean validateMove(Move moving)
@@ -233,54 +185,11 @@ public class Main
 		return newPuzzle;
 	}
 	
-	private static int getTired(int[][] puzzle) //quantas trocas tem que fazer para chegar no objetivo?
-	{
-		int tired = 0;
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if(PUZZLE_TARGET[i][j] != puzzle[i][j]){
-					tired++;
-				}
-			}
-		}
-		
-		return tired / 2;
-	}
 	
-	private static boolean similars(int[][] a, int[][]b)
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if(a[i][j] != b[i][j])
-				{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
 	
-	private static void printSolution(Quadrant solution)
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				System.out.print(solution.puzzle[i][j] + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
-				
-		if(solution.next != null)
-		{
-			printSolution(solution.next);
-		}
-	}
+	
+	
+	
 	
 	public enum Move
 	{
