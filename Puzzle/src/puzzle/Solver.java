@@ -7,10 +7,10 @@ import java.util.List;
 public class Solver
 {
 	static int[][] PUZZLE_TARGET = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
-	static ArrayList<Quadrant> queue = new ArrayList<Quadrant>(); // fila
-	static ArrayList<Quadrant> useds = new ArrayList<Quadrant>(); // visitados
+	static ArrayList<Quadrant> queue = new ArrayList<Quadrant>(); 
+	static ArrayList<Quadrant> useds = new ArrayList<Quadrant>(); 
 
-	static int COORDINATE_X_I = 0, COORDINATE_X_J = 0; // coordinadas do x
+	static int COORDINATE_X_I = 0, COORDINATE_X_J = 0;
 
 	public static void solve(int[][] head)
 	{
@@ -188,12 +188,6 @@ public class Solver
 		
 		return newPuzzle;
 	}
-	
-	
-	
-	
-	
-	
 	
 	public enum Move
 	{
