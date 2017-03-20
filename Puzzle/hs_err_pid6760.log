@@ -233,7 +233,7 @@ Dynamic libraries:
 
 VM Arguments:
 jvm_args: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:52210 -Dfile.encoding=Cp1252 
-java_command: puzzle.Main
+java_command: puzzle.Solver
 java_class_path (initial): C:\Users\Rayana\workspace\Puzzle\bin
 Launcher Type: SUN_STANDARD
 

@@ -6,11 +6,25 @@ public class Quadrant
 
 	Quadrant previous;
 	Quadrant next;
-	
-	public Quadrant(int[][] puzzle, Quadrant previous, Quadrant next)
+
+	public Quadrant(int[][] puzzle)
 	{
 		this.puzzle = puzzle;
-		this.previous = previous;
-		this.next = next;
+	}
+
+	public String toString()
+	{
+		String result = "";
+		
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				result += this.puzzle[i][j] + "";
+			}
+			result += "/n";
+		}
+		
+		return result;
 	}
 }
