@@ -1,45 +1,37 @@
-package puzzle;
+package puzzle2;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Solver
 {
 	static int[][] PUZZLE_TARGET = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
 	static ArrayList<Quadrant> queue = new ArrayList<Quadrant>(); 
 	static ArrayList<Quadrant> useds = new ArrayList<Quadrant>(); 
-
-	static int COORDINATE_X_I = 0, COORDINATE_X_J = 0;
-	static int movesCount = 0;
-
+	
+	static int COORDINATE_X_I = 0, COORDINATE_X_J = 0; //help me find x on current node
+	
 	public static void solve(int[][] head)
 	{
-		Quadrant current = new Quadrant(head);;
+		Quadrant current = new Quadrant(head, null);;
 		boolean solved = false;
 		
 		queue.add(current);
 		
 		do {
-			current = queue.remove(queue.size() - 1);	
-			if (Help.similars(current.puzzle, PUZZLE_TARGET)) 
+			current = queue.remove(0);	
+			//poda
+			
+			if (Help.similars(current.puzzle, PUZZLE_TARGET))
 			{
 				solved = true;
 				break;
 			}
-//			if(movesCount > 31) //sem solução
-//			{
-//				solved = false;
-//				break;
-//			}
-			if (!Help.usedBefore(current.puzzle)) 
+			if (!Help.usedBefore(current.puzzle)) //otimize sobreescrevendo o contains
 			{
 				useds.add(current);
 				expand(current);
 			}
 		} while (!queue.isEmpty() && !solved);
-		
-		
 		
 		if(solved)
 		{
@@ -52,67 +44,39 @@ public class Solver
 			System.out.println("Não achei solução");
 		}
 	}
-
+	
 	private static void expand(Quadrant current)
 	{
-		Quadrant bestShot = new Quadrant(getBestShot(current.puzzle));
-
-		bestShot.previous = current;	
-		current.next = bestShot;
+		Help.findX(current.puzzle); //refresh coordinates
 		
-		queue.add(bestShot); //add a melhor jogada, na lista de jogadas
-	}
-
-	private static int[][] getBestShot(int[][] puzzle)
-	{
-		//possible moviments (max = 4)
-		int[][] one = new int[3][3];
-		int[][] two = new int[3][3];
-		int[][] three = new int[3][3];
-		int[][] four = new int[3][3];
+		// 1 - gere os filhos dele
+		// 2 - adicione os filhos em queue
 		
-		// 1.1 - find x
-		Help.findX(puzzle);
-
-		// 1.2 - swap if you can
-		if (validateMove(Move.UP))		
-			one = swap(Move.UP, puzzle);
-
-		if (validateMove(Move.RIGHT))		
-			two = swap(Move.RIGHT, puzzle);
+		if (validateMove(Move.UP))
+		{
+			current.up = new Quadrant(swap(Move.UP, current.puzzle), current);	
+			queue.add(current.up);
+		}		 
 		
-		if (validateMove(Move.DOWN))		
-			three = swap(Move.DOWN, puzzle);
+		if (validateMove(Move.RIGHT))	
+		{
+			current.right = new Quadrant(swap(Move.RIGHT, current.puzzle), current);	
+			queue.add(current.right);
+		}	
+		
+		if (validateMove(Move.DOWN))	
+		{
+			current.down = new Quadrant(swap(Move.DOWN, current.puzzle), current);
+			queue.add(current.down);
+		}	
 		
 		if (validateMove(Move.LEFT))
-			four = swap(Move.LEFT, puzzle);
-
-		// 2 - compare possibilities with target. count tired of each one
-		List<Integer> tireds = new ArrayList<Integer>();
-		tireds.add(Help.getTired(one));
-		tireds.add(Help.getTired(two));
-		tireds.add(Help.getTired(three));
-		tireds.add(Help.getTired(four));
-		
-		// 3 - choose the best shot
-		int min = Collections.min(tireds); //menor esforço
-		int indexOfBestShot = tireds.indexOf(min); //pegar o index doq elemento que gasta menos esforço.
-		
-		switch (indexOfBestShot)
 		{
-			case 0:
-				return one;				
-			case 1:
-				return two;
-			case 2:
-				return three;
-			case 3:
-				return four;
-			default:
-				return null;			
-		}
+			current.left = new Quadrant(swap(Move.LEFT, current.puzzle), current);	
+			queue.add(current.left);
+		}		
 	}
-
+	
 	private static boolean validateMove(Move moving)
 	{
 		if (Move.UP.equals(moving))
@@ -148,10 +112,9 @@ public class Solver
 		}
 		return false;
 	}
-
+	
 	private static int[][] swap(Move moving, int[][] puzzle)
 	{
-		movesCount++;
 		int help = 0;
 		int[][] newPuzzle = new int[3][3];
 		
