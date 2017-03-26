@@ -19,8 +19,7 @@ public class Solver
 		
 		do {
 			current = queue.remove(0);	
-			//poda
-			
+						
 			if (Help.similars(current.puzzle, PUZZLE_TARGET))
 			{
 				solved = true;
@@ -50,30 +49,42 @@ public class Solver
 		Help.findX(current.puzzle); //refresh coordinates
 		
 		// 1 - gere os filhos dele
-		// 2 - adicione os filhos em queue
+		// 2 - adicione os filhos em queue (podando)
 		
 		if (validateMove(Move.UP))
 		{
 			current.up = new Quadrant(swap(Move.UP, current.puzzle), current);	
-			queue.add(current.up);
+			if(!prune(current.up))
+			{
+				queue.add(current.up);
+			}
 		}		 
 		
 		if (validateMove(Move.RIGHT))	
 		{
-			current.right = new Quadrant(swap(Move.RIGHT, current.puzzle), current);	
-			queue.add(current.right);
+			current.right = new Quadrant(swap(Move.RIGHT, current.puzzle), current);
+			if(!prune(current.right))
+			{
+				queue.add(current.right);
+			}
 		}	
 		
 		if (validateMove(Move.DOWN))	
 		{
 			current.down = new Quadrant(swap(Move.DOWN, current.puzzle), current);
-			queue.add(current.down);
+			if(!prune(current.down))
+			{
+				queue.add(current.down);
+			}
 		}	
 		
 		if (validateMove(Move.LEFT))
 		{
-			current.left = new Quadrant(swap(Move.LEFT, current.puzzle), current);	
-			queue.add(current.left);
+			current.left = new Quadrant(swap(Move.LEFT, current.puzzle), current);
+			if(!prune(current.left))
+			{
+				queue.add(current.left);
+			}
 		}		
 	}
 	
@@ -156,6 +167,23 @@ public class Solver
 		}
 		
 		return newPuzzle;
+	}
+	
+	private static boolean prune(Quadrant q)
+	{
+		//vc eh igual ao seu pai?
+		if(Help.similars(q.puzzle, q.previous.puzzle))
+		{
+			return true;
+		}
+		
+		//vc ja foi usado antes?
+		if(Help.usedBefore(q.puzzle))
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public enum Move
