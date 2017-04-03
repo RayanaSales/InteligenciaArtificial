@@ -9,6 +9,7 @@ public class Solver
 	
 	public static void solve(int[] entrada)
 	{
+		int column = 0;
 		Node current = new Node();;
 		boolean resolvido = false;
 		
@@ -17,15 +18,20 @@ public class Solver
 		do {
 			current = fila.remove(0);	
 						
-			if (Help.solved(current.board))
+			if (Help.solved(current))
 			{
 				resolvido = true;
 				break;
 			}
 			if (!Help.used(current))
 			{
+				if(column == 7)
+					column = 0;
+				
 				useds.add(current);
-				expand(current);
+				expand(current, column);
+				
+				column++;
 			}
 		} while (!fila.isEmpty() && !resolvido);
 		
@@ -41,10 +47,15 @@ public class Solver
 		}
 	}
 	
-	private static void expand(Node node)
+	private static void expand(Node node, int column)
 	{
-		//gera todas permutações
+		//gera todas permutações, da coluna
 		//escolhe a melhor (menor qtd de ataques)
 		//adiciona melhor na fila
+		
+		int cord_y_queen = column;
+		int cord_x_queen = node.board[column];
+		
+		
 	}
 }

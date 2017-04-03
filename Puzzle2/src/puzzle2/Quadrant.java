@@ -1,5 +1,7 @@
 package puzzle2;
 
+import java.util.Arrays;
+
 public class Quadrant
 {
 	//current
@@ -35,6 +37,12 @@ public class Quadrant
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return Arrays.deepHashCode(puzzle);
 	}
 	
 	@Override

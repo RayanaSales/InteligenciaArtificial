@@ -1,10 +1,11 @@
 package puzzle2;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Solver
 {
-	static int[][] PUZZLE_TARGET = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
+	static int[][] PUZZLE_TARGET = { { 0,1, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
 	static ArrayList<Quadrant> queue = new ArrayList<Quadrant>(); 
 	static ArrayList<Quadrant> useds = new ArrayList<Quadrant>(); 
 	
@@ -12,7 +13,9 @@ public class Solver
 	
 	public static void solve(int[][] head)
 	{
-		Quadrant current = new Quadrant(head, null);;
+		Quadrant current = new Quadrant(head, null);
+		HashSet<Quadrant> visitados =  new HashSet<>();
+		
 		boolean solved = false;
 		
 		queue.add(current);
@@ -25,9 +28,9 @@ public class Solver
 				solved = true;
 				break;
 			}
-			if (!Help.usedBefore(current.puzzle)) //otimize sobreescrevendo o contains
+			if (!visitados.contains(current)) //otimize sobreescrevendo o contains
 			{
-				useds.add(current);
+				visitados.add(current);
 				expand(current);
 			}
 		} while (!queue.isEmpty() && !solved);

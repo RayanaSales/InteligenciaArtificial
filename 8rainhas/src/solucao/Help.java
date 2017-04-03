@@ -2,13 +2,19 @@ package solucao;
 
 public class Help
 {
-	public static boolean solved(int[] tabuleiro)
+	public static boolean solved(Node node)
 	{
 		// verifica se o array atual possui ataques = 0
 		
-		
+		for(int i= 0 ; i<8 ; i++)
+		{
+			if(countAttacksByColumn(node, i) != 0)
+			{
+				return false;
+			}
+		}
 
-		return false;
+		return true;
 	}
 
 	public static int countAttacksByColumn(Node node, int column)

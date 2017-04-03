@@ -4,6 +4,7 @@ public class Node
 {
 	Node anterior;	
 	int[] board;
+	int attacks;
 	
 	Node permutacao1;
 	Node permutacao2;
