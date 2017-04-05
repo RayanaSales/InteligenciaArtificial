@@ -45,11 +45,13 @@ public class Help
 		}
 	}
 	
+	public static int steps = 0;
 	// recursão. Se vc tem um pai, chame ele.
 	protected static void printSolution(Quadrant solution)
 	{
 		if (solution.previous != null)
 		{
+			++steps;
 			printSolution(solution.previous);
 		}
 

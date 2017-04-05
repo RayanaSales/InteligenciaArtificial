@@ -96,15 +96,18 @@ public class Help
 
 		return attacks;
 	}
-
-	public static boolean used(Node node)
+	
+	public static int steps = 0;
+	protected static void printSolution(Node solution)
 	{
-		return false;
-	}
+		if (solution.anterior != null)
+		{
+			++steps;
+			printSolution(solution.anterior);
+		}
 
-	public static void printSolution(Node node)
-	{
-
+		// qd chega no head, ele vai retornando e imprimindo o puzzle atual.		
+		System.out.println(solution.board.toString());
 	}
 
 	private static boolean anyAttack(int[] board, int x, int y)

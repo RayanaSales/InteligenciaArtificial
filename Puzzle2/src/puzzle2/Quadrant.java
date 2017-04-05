@@ -23,23 +23,6 @@ public class Quadrant
 	}
 	
 	@Override
-	public boolean equals(Object quadrant) //nao funcionou '-'
-	{
-		Quadrant other = (Quadrant) quadrant;
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if (this.puzzle[i][j] != other.puzzle[i][j])
-				{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	@Override
 	public int hashCode() {
 		// TODO Auto-generated method stub
 		return Arrays.deepHashCode(puzzle);

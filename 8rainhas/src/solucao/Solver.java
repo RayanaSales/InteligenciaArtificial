@@ -1,45 +1,50 @@
 package solucao;
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class Solver
 {
-	static ArrayList<Node> fila = new ArrayList<Node>(); 
-	static ArrayList<Node> useds = new ArrayList<Node>(); 
+	static ArrayList<Node> queue = new ArrayList<Node>(); 
+	//static ArrayList<Node> useds = new ArrayList<Node>(); 
 	
-	public static void solve(int[] entrada)
+	public static void solve(Node current)
 	{
-		int column = 0;
-		Node current = new Node();;
-		boolean resolvido = false;
+		int column = 0;		
+		boolean solved = false;
 		
-		fila.add(current);
+		HashSet<Node> visitados =  new HashSet<>();
+		
+		queue.add(current);
 		
 		do {
-			current = fila.remove(0);	
+			current = queue.remove(0);	
 						
 			if (Help.solved(current))
 			{
-				resolvido = true;
+				solved = true;
 				break;
 			}
-			if (!Help.used(current))
+			if (!visitados.contains(current))
 			{
 				if(column == 7)
 					column = 0;
 				
-				useds.add(current);
+				visitados.add(current);
 				expand(current, column);
 				
 				column++;
 			}
-		} while (!fila.isEmpty() && !resolvido);
+		} while (!queue.isEmpty() && !solved);
 		
-		if(resolvido)
+		if(solved)
 		{
 			System.out.println("SOLUÇÃO:");
 			Help.printSolution(current);
-			System.out.println("FIM DA SOLUÇÃO!");
+			System.out.println("FIM DA SOLUÇÃO!" + Help.steps + " passos executados.");
 		}
 		else
 		{
@@ -49,13 +54,106 @@ public class Solver
 	
 	private static void expand(Node node, int column)
 	{
-		//gera todas permutações, da coluna
-		//escolhe a melhor (menor qtd de ataques)
-		//adiciona melhor na fila
-		
-		int cord_y_queen = column;
+//		-pega as coordenadas da primeira rainha
 		int cord_x_queen = node.board[column];
 		
+//		-gera 4 novos tabuleiros (permutando a rainha da coluna x)		
+		if(cord_x_queen != 0)
+		{
+			node.swap0.board = Arrays.copyOf(node.board, 8);
+			node.swap0.board[column] = 0;
+		}
+		if(cord_x_queen != 1)
+		{
+			node.swap1.board = Arrays.copyOf(node.board, 8);
+			node.swap1.board[column] = 1;
+		}
+		if(cord_x_queen != 2)
+		{
+			node.swap2.board = Arrays.copyOf(node.board, 8);
+			node.swap2.board[column] = 2;
+		}
+		if(cord_x_queen != 3)
+		{
+			node.swap3.board = Arrays.copyOf(node.board, 8);
+			node.swap3.board[column] = 3;
+		}
+		if(cord_x_queen != 4)
+		{
+			node.swap4.board = Arrays.copyOf(node.board, 8);
+			node.swap4.board[column] = 4;
+		}
+		if(cord_x_queen != 5)
+		{
+			node.swap5.board = Arrays.copyOf(node.board, 8);
+			node.swap5.board[column] = 5;
+		}
+		if(cord_x_queen != 6)
+		{
+			node.swap6.board = Arrays.copyOf(node.board, 8);
+			node.swap6.board[column] = 6;
+		}
+		if(cord_x_queen != 7)
+		{
+			node.swap7.board = Arrays.copyOf(node.board, 8);
+			node.swap7.board[column] = 7;
+		}	
 		
+//		-calcula ataques para as permutações 
+		Map<Node, Integer> map = new HashMap<Node, Integer>();
+		
+		if(node.swap0.board != null)
+		{
+			node.swap0.attacks = Help.countAttacksByColumn(node.swap0, column);
+			map.put(node.swap0, node.swap0.attacks);
+		}
+		if(node.swap1.board != null)
+		{	
+			node.swap1.attacks = Help.countAttacksByColumn(node.swap1, column);
+			map.put(node.swap1, node.swap1.attacks);
+		}		
+		if(node.swap2.board != null)
+		{
+			node.swap2.attacks = Help.countAttacksByColumn(node.swap2, column);
+			map.put(node.swap2, node.swap2.attacks);
+		}
+		if(node.swap3.board != null)
+		{
+			node.swap3.attacks = Help.countAttacksByColumn(node.swap3, column);
+			map.put(node.swap3, node.swap3.attacks);
+		}
+		if(node.swap4.board != null)
+		{
+			node.swap4.attacks = Help.countAttacksByColumn(node.swap4, column);
+			map.put(node.swap4, node.swap4.attacks);
+		}
+		if(node.swap5.board != null)
+		{
+			node.swap5.attacks = Help.countAttacksByColumn(node.swap5, column);
+			map.put(node.swap5, node.swap5.attacks);
+		}
+		if(node.swap6.board != null)
+		{
+			node.swap6.attacks = Help.countAttacksByColumn(node.swap6, column);
+			map.put(node.swap6, node.swap6.attacks);
+		}
+		if(node.swap7.board != null)
+		{
+			node.swap7.attacks = Help.countAttacksByColumn(node.swap7, column);
+			map.put(node.swap7, node.swap7.attacks);
+		}
+		
+//		-get the best shot				
+		Node next = new Node();
+		Integer bestShot = (Integer) Collections.min(map.values());
+		
+		for (java.util.Map.Entry<Node, Integer> entry : map.entrySet()) 
+		{
+            if (entry.getValue().equals(bestShot)) 
+            {
+                next.board = entry.getKey().board;
+            }
+        }
+		queue.add(next);
 	}
 }
