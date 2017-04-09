@@ -17,17 +17,17 @@ public class Help
 		return true;
 	}
 	
-	protected static boolean usedBefore(int[][] puzzle)
-	{
-		for (Quadrant used : Solver.useds)
-		{
-			if (used.puzzle == puzzle)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+//	protected static boolean usedBefore(int[][] puzzle)
+//	{
+//		for (Quadrant used : Solver.useds)
+//		{
+//			if (used.puzzle == puzzle)
+//			{
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
 	protected static void findX(int[][] puzzle)
 	{

@@ -39,13 +39,6 @@ public class Node
 	
 	public Node()
 	{
-		swap0 = new Node();
-		swap1 = new Node();
-		swap2 = new Node();
-		swap3 = new Node();
-		swap4 = new Node();
-		swap5 = new Node();
-		swap6 = new Node();
-		swap7 = new Node();
+		
 	}
 }

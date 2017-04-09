@@ -9,14 +9,12 @@ import java.util.Map;
 public class Solver
 {
 	static ArrayList<Node> queue = new ArrayList<Node>(); 
-	//static ArrayList<Node> useds = new ArrayList<Node>(); 
+	static HashSet<Node> visitados =  new HashSet<>();
 	
 	public static void solve(Node current)
 	{
 		int column = 0;		
 		boolean solved = false;
-		
-		HashSet<Node> visitados =  new HashSet<>();
 		
 		queue.add(current);
 		
@@ -33,9 +31,8 @@ public class Solver
 				if(column == 7)
 					column = 0;
 				
-				visitados.add(current);
 				expand(current, column);
-				
+				visitados.add(current);				
 				column++;
 			}
 		} while (!queue.isEmpty() && !solved);
@@ -144,7 +141,7 @@ public class Solver
 		}
 		
 //		-get the best shot				
-		Node next = new Node();
+		Node next = Help.createNode(node, null);
 		Integer bestShot = (Integer) Collections.min(map.values());
 		
 		for (java.util.Map.Entry<Node, Integer> entry : map.entrySet()) 
@@ -154,6 +151,21 @@ public class Solver
                 next.board = entry.getKey().board;
             }
         }
-		queue.add(next);
+		
+		if(!prune(next))
+		{
+			queue.add(next);
+		}
+	}
+	
+	private static boolean prune(Node node)
+	{		
+		//vc ja foi usado antes?
+		if(visitados.contains(node))
+		{
+			return true;
+		}
+		
+		return false;
 	}
 }

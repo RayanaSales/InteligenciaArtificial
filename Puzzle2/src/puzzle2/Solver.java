@@ -8,15 +8,14 @@ public class Solver
 //	static int[][] PUZZLE_TARGET = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
 	static int[][] PUZZLE_TARGET = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
 	static ArrayList<Quadrant> queue = new ArrayList<Quadrant>(); 
-	static ArrayList<Quadrant> useds = new ArrayList<Quadrant>(); 
+	//static ArrayList<Quadrant> useds = new ArrayList<Quadrant>(); 
+	static HashSet<Quadrant> visitados =  new HashSet<>();
 	
 	static int COORDINATE_X_I = 0, COORDINATE_X_J = 0; //help me find x on current node
 	
 	public static void solve(int[][] head)
 	{
 		Quadrant current = new Quadrant(head, null);
-		HashSet<Quadrant> visitados =  new HashSet<>();
-		
 		boolean solved = false;
 		
 		queue.add(current);
@@ -183,7 +182,7 @@ public class Solver
 		}
 		
 		//vc ja foi usado antes?
-		if(Help.usedBefore(q.puzzle))
+		if(visitados.contains(q))
 		{
 			return true;
 		}

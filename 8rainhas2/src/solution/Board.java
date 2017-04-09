@@ -1,41 +1,48 @@
-package solucao;
+package solution;
 
-public class Help
+import java.util.Arrays;
+
+public class Board
 {
-	public static Node createNode(Node previous, int[] array)
+	Board previous;
+	int[] config;
+	public int attacks;
+
+	public Board(int[] config)
 	{
-		Node node = new Node(array);
-		
-		node.anterior = previous;
-		
-		node.swap0 = new Node();
-		node.swap1 = new Node();
-		node.swap2 = new Node();
-		node.swap3 = new Node();
-		node.swap4 = new Node();
-		node.swap5 = new Node();
-		node.swap6 = new Node();
-		node.swap7 = new Node();
-		
-		return node;
+		this.config = config;
+
+	}
+
+	public Board()
+	{
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public int hashCode()
+	{
+		// TODO Auto-generated method stub
+		return Arrays.hashCode(config);
 	}
 	
-	public static boolean solved(Node node)
+	
+	
+	
+	
+	
+	
+	public int countAttacks()
 	{
-		// verifica se o array atual possui ataques = 0
-		
-		for(int i= 0 ; i<8 ; i++)
+		for(int i = 0 ; i <= 7 ; i++)
 		{
-			if(countAttacksByColumn(node, i) != 0)
-			{
-				return false;
-			}
+			attacks += countAttacksByColumn(i);
 		}
-
-		return true;
+		
+		return attacks;
 	}
-
-	public static int countAttacksByColumn(Node node, int column)
+	
+	private int countAttacksByColumn(int column)
 	{
 		//a rainha da coluna x, ataca quantas outras rainhas??
 		
@@ -45,11 +52,11 @@ public class Help
 		
 		int attacks = 0;
 
-		int cord_i_queen = node.board[column];
+		int cord_i_queen = config[column];
 		int cord_j_queen = column;
 
 		// tem alguem na msm linha q eu?		
-		attacks += getOccurrences(node.board, cord_i_queen) - 1;
+		attacks += getOccurrences(config, cord_i_queen) - 1;
 
 		// tem alguem nas minhas diagonais?
 		int x = cord_i_queen;
@@ -63,7 +70,7 @@ public class Help
 			if(x < 0 || y > 7)
 				break;
 			
-			if (anyAttack(node.board, x, y))
+			if (anyAttack(config, x, y))
 				attacks++;
 		}
 
@@ -78,7 +85,7 @@ public class Help
 			if(x > 7 || y > 7)
 				break;
 			
-			if (anyAttack(node.board, x, y))
+			if (anyAttack(config, x, y))
 				attacks++;
 		}
 
@@ -93,7 +100,7 @@ public class Help
 			if(x > 7 || y < 0)
 				break;
 			
-			if (anyAttack(node.board, x, y))
+			if (anyAttack(config, x, y))
 				attacks++;
 		}
 		
@@ -108,27 +115,14 @@ public class Help
 			if(x < 0 || y < 0)
 				break;
 			
-			if (anyAttack(node.board, x, y))
+			if (anyAttack(config, x, y))
 				attacks++;
 		}
 
 		return attacks;
 	}
 	
-	public static int steps = 0;
-	protected static void printSolution(Node solution)
-	{
-		if (solution.anterior != null)
-		{
-			++steps;
-			printSolution(solution.anterior);
-		}
-
-		// qd chega no head, ele vai retornando e imprimindo o puzzle atual.		
-		System.out.println(solution.board.toString());
-	}
-
-	private static boolean anyAttack(int[] board, int x, int y)
+	private boolean anyAttack(int[] board, int x, int y)
 	{
 		// procura onde a rainha dessa coluna esta
 		int queen_board_i = board[y];
@@ -140,8 +134,8 @@ public class Help
 		else
 			return false;
 	}
-
-	private static int getOccurrences(int[] array, int element)
+	
+	private int getOccurrences(int[] array, int element)
 	{
 		int occurrences = 0;
 		
