@@ -9,7 +9,7 @@ import java.util.HashSet;
 public class Solver
 {
 	static ArrayList<Board> queue = new ArrayList<Board>();
-	static HashSet<Board> useds = new HashSet<>();
+	static ArrayList<Board> useds = new ArrayList<Board>();
 
 	public static void solve(Board current)
 	{
@@ -17,14 +17,9 @@ public class Solver
 		queue.add(current);
 
 		do
-		{
-			if(queue.isEmpty())
-			{
-				queue.add(current);
-			}
-			
+		{			
 			current = queue.remove(queue.size() - 1);
-
+			
 			if (Help.Solved(current))
 			{
 				solved = true;
@@ -63,11 +58,11 @@ public class Solver
 				Board swap = Swap(current, column, nextColumn);
 
 				swap.previous = current;
-				if (!prune(swap))
-				{
+//				if (!prune(swap))
+//				{
 					swap.countAttacks();
 					queue.add(swap);
-				}
+//				}
 				nextColumn++;
 			}
 		}

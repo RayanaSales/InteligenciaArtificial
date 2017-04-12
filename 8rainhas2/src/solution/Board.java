@@ -7,16 +7,18 @@ public class Board
 	Board previous;
 	int[] config;
 	public int attacks;
+	
+	private boolean alreadyCounted = false;
 
 	public Board(int[] config)
 	{
 		this.config = config;
-
+		this.attacks = 0;
 	}
 
 	public Board()
 	{
-		// TODO Auto-generated constructor stub
+		this.attacks = 0;
 	}
 
 	@Override
@@ -37,6 +39,7 @@ public class Board
 			if (b.config[i] != this.config[i])
 			{
 				similars = false;
+				break;
 			}
 		}
 		return similars;
@@ -44,12 +47,15 @@ public class Board
 
 	public int countAttacks()
 	{
+		this.attacks = 0;
+		
 		for (int i = 0; i <= 7; i++)
 		{
-			attacks += countAttacksByColumn(i);
+			//System.out.println("Contando ataques, coluna: " + i);
+			this.attacks += countAttacksByColumn(i);
 		}
 
-		return attacks;
+		return this.attacks;
 	}
 
 	private int countAttacksByColumn(int column)
