@@ -13,11 +13,6 @@ public class Help
 		return false;
 	}
 	
-	public static void DoInsertionSort(Board board)
-	{
-		// insere na fila, ordenando por ataque.
-	}
-
 	protected static boolean Similars(int[] config, int[] config2)
 	{
 		for (int i = 0; i < 3; i++)
@@ -41,9 +36,14 @@ public class Help
 		}
 
 		// qd chega no head, ele vai retornando e imprimindo o puzzle atual.
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 8; i++)
 		{
-			System.out.print(solution.config[i] + ", ");
+                    if(i == 7){
+                       System.out.print(solution.config[i]); 
+                    }
+                    else{
+                        System.out.print(solution.config[i] + ", "); 
+                    }
 		}
 		System.out.println();
 	}

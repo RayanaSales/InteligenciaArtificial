@@ -16,19 +16,7 @@ public class Help
 		}
 		return true;
 	}
-	
-//	protected static boolean usedBefore(int[][] puzzle)
-//	{
-//		for (Quadrant used : Solver.useds)
-//		{
-//			if (used.puzzle == puzzle)
-//			{
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-	
+
 	protected static void findX(int[][] puzzle)
 	{
 		for (int i = 0; i < 3; i++)
@@ -44,9 +32,10 @@ public class Help
 			}
 		}
 	}
-	
+
 	public static int steps = 0;
-	// recursão. Se vc tem um pai, chame ele.
+
+	// recursao. Se vc tem um pai, chame ele.
 	protected static void printSolution(Quadrant solution)
 	{
 		if (solution.previous != null)

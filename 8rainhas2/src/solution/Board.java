@@ -25,37 +25,47 @@ public class Board
 		// TODO Auto-generated method stub
 		return Arrays.hashCode(config);
 	}
-	
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		boolean similars = true;
+		Board b = (Board) obj;
+
+		for (int i = 0; i < 8; i++)
+		{
+			if (b.config[i] != this.config[i])
+			{
+				similars = false;
+			}
+		}
+		return similars;
+	}
+
 	public int countAttacks()
 	{
-		for(int i = 0 ; i <= 7 ; i++)
+		for (int i = 0; i <= 7; i++)
 		{
 			attacks += countAttacksByColumn(i);
 		}
-		
+
 		return attacks;
 	}
-	
+
 	private int countAttacksByColumn(int column)
 	{
-		//a rainha da coluna x, ataca quantas outras rainhas??
-		
-		// 1- rainhas não podem ocupar a msm coluna
-		// 2- rainhas não podem ocupar a mesma linha
-		// 3- rainhas não podem estar cruzando diagonais
-		
+		// a rainha da coluna x, ataca quantas outras rainhas??
+
+		// 1- rainhas nao podem ocupar a msm coluna
+		// 2- rainhas nao podem ocupar a mesma linha
+		// 3- rainhas nao podem estar cruzando diagonais
+
 		int attacks = 0;
 
 		int cord_i_queen = config[column];
 		int cord_j_queen = column;
 
-		// tem alguem na msm linha q eu?		
+		// tem alguem na msm linha q eu?
 		attacks += getOccurrences(config, cord_i_queen) - 1;
 
 		// tem alguem nas minhas diagonais?
@@ -65,11 +75,11 @@ public class Board
 		while (x >= 0 && y <= 7)
 		{
 			x--;
-			y++;	
-			
-			if(x < 0 || y > 7)
+			y++;
+
+			if (x < 0 || y > 7)
 				break;
-			
+
 			if (anyAttack(config, x, y))
 				attacks++;
 		}
@@ -81,10 +91,10 @@ public class Board
 		{
 			x++;
 			y++;
-			
-			if(x > 7 || y > 7)
+
+			if (x > 7 || y > 7)
 				break;
-			
+
 			if (anyAttack(config, x, y))
 				attacks++;
 		}
@@ -96,14 +106,14 @@ public class Board
 		{
 			x++;
 			y--;
-			
-			if(x > 7 || y < 0)
+
+			if (x > 7 || y < 0)
 				break;
-			
+
 			if (anyAttack(config, x, y))
 				attacks++;
 		}
-		
+
 		x = cord_i_queen;
 		y = cord_j_queen;
 
@@ -111,37 +121,37 @@ public class Board
 		{
 			x--;
 			y--;
-			
-			if(x < 0 || y < 0)
+
+			if (x < 0 || y < 0)
 				break;
-			
+
 			if (anyAttack(config, x, y))
 				attacks++;
 		}
 
 		return attacks;
 	}
-	
+
 	private boolean anyAttack(int[] board, int x, int y)
 	{
 		// procura onde a rainha dessa coluna esta
 		int queen_board_i = board[y];
 		int queen_board_j = y;
 
-		//essa rainha ataca alguem em tal posicao?
+		// essa rainha ataca alguem em tal posicao?
 		if (queen_board_i == x && queen_board_j == y)
 			return true;
 		else
 			return false;
 	}
-	
+
 	private int getOccurrences(int[] array, int element)
 	{
 		int occurrences = 0;
-		
+
 		for (int i : array)
 		{
-			if(i == element)
+			if (i == element)
 			{
 				occurrences++;
 			}

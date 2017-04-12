@@ -18,6 +18,11 @@ public class Solver
 
 		do
 		{
+			if(queue.isEmpty())
+			{
+				queue.add(current);
+			}
+			
 			current = queue.remove(queue.size() - 1);
 
 			if (Help.Solved(current))
@@ -30,24 +35,16 @@ public class Solver
 				expand(current);
 				useds.add(current);
 			}
-		} while (!queue.isEmpty() && !solved);
+		} while (!solved);
 
-		if (solved)
-		{
-			System.out.println("SOLUÇÃO ENCONTRADA:");
-			Help.PrintSolution(current);
-			System.out.println("FIM DA SOLUÇÃO! " + ++Help.steps + " passos executados.");
-		}
-		else
-		{
-			System.out.println("Não achei solução");
-		}
-
+		System.out.println("SOLUCAO ENCONTRADA:");
+		Help.PrintSolution(current);
+		System.out.println("FIM DA SOLUCAO! " + ++Help.steps + " passos executados.");
 	}
 
 	private static void expand(Board current)
 	{
-		// enquanto houver possibilidades de permutação
+		// enquanto houver possibilidades de permutaï¿½ï¿½o
 		// {
 		// -permute
 		// if !prune()
@@ -71,7 +68,6 @@ public class Solver
 					swap.countAttacks();
 					queue.add(swap);
 				}
-
 				nextColumn++;
 			}
 		}
@@ -82,8 +78,7 @@ public class Solver
 			@Override
 			public int compare(Board b, Board b1)
 			{
-				// -1 - less than, 1 - greater than, 0 - equal, all inversed for
-				// descending
+				// -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
 				return b.attacks > b1.attacks ? -1 : (b.attacks < b1.attacks) ? 1 : 0;
 			}
 		});
