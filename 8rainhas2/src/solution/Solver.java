@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 
 public class Solver
 {
@@ -14,27 +13,42 @@ public class Solver
 	public static void solve(Board current)
 	{
 		boolean solved = false;
-		queue.add(current);
+		boolean valid = false;
+		
+		// array valido?
+		valid = Help.ValidArray(current.config);
 
-		do
-		{			
-			current = queue.remove(queue.size() - 1);
-			
-			if (Help.Solved(current))
+		if (valid)
+		{
+			queue.add(current);
+			do
 			{
-				solved = true;
-				break;
-			}
-			if (!useds.contains(current))
-			{
-				expand(current);
-				useds.add(current);
-			}
-		} while (!solved);
+				current = queue.remove(queue.size() - 1);
 
-		System.out.println("SOLUCAO ENCONTRADA:");
-		Help.PrintSolution(current);
-		System.out.println("FIM DA SOLUCAO! " + ++Help.steps + " passos executados.");
+				if (Help.Solved(current))
+				{
+					solved = true;
+					break;
+				}
+				if (!useds.contains(current))
+				{
+					expand(current);
+					useds.add(current);
+				}
+			} while (!solved);
+		}
+		
+		if (solved)
+		{
+			System.out.println("SOLUCAO ENCONTRADA:");
+			Help.PrintSolution(current);
+			System.out.println("FIM DA SOLUCAO! " + ++Help.steps + " passos executados.");
+		}
+		else
+		{
+			System.out.println("Não há solução. Insira uma entrada válida.\nEntradas válidas: matrizes 8x8 onde linhas e colunas, não se repitam!");
+		}
+
 	}
 
 	private static void expand(Board current)
@@ -58,11 +72,11 @@ public class Solver
 				Board swap = Swap(current, column, nextColumn);
 
 				swap.previous = current;
-//				if (!prune(swap))
-//				{
-					swap.countAttacks();
-					queue.add(swap);
-//				}
+				// if (!prune(swap))
+				// {
+				swap.countAttacks();
+				queue.add(swap);
+				// }
 				nextColumn++;
 			}
 		}
@@ -73,7 +87,8 @@ public class Solver
 			@Override
 			public int compare(Board b, Board b1)
 			{
-				// -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+				// -1 - less than, 1 - greater than, 0 - equal, all inversed for
+				// descending
 				return b.attacks > b1.attacks ? -1 : (b.attacks < b1.attacks) ? 1 : 0;
 			}
 		});
