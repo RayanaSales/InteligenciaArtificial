@@ -7,8 +7,6 @@ public class Board
 	Board previous;
 	int[] config;
 	public int attacks;
-	
-	private boolean alreadyCounted = false;
 
 	public Board(int[] config)
 	{
@@ -67,101 +65,99 @@ public class Board
 		// 3- rainhas nao podem estar cruzando diagonais
 
 		int attacks = 0;
-
 		int cord_i_queen = config[column];
 		int cord_j_queen = column;
 
-		// tem alguem na msm linha q eu?
-		attacks += getOccurrences(config, cord_i_queen) - 1;
+		// 1- tem alguem na msm linha q eu?
+		attacks += Help.getOccurrences(config, cord_i_queen) - 1;
 
-		// tem alguem nas minhas diagonais?
+		// 2- tem alguem nas minhas diagonais? (percorro diagonais, se tiver alguem la, ta em ataque)		
 		int x = cord_i_queen;
 		int y = cord_j_queen;
+		
+		int rival_column = column; //coluna da rival que estou testando no momento
 
-		while (x >= 0 && y <= 7)
+		while (x >= 0 && y <= 7) //up, right
 		{
+			rival_column++;
 			x--;
 			y++;
 
 			if (x < 0 || y > 7)
 				break;
 
-			if (anyAttack(config, x, y))
-				attacks++;
+			if (anyAttack(rival_column, x, y))
+				attacks++;			
 		}
 
 		x = cord_i_queen;
 		y = cord_j_queen;
+		rival_column = column;
 
-		while (x <= 7 && y <= 7)
+		while (x <= 7 && y <= 7) //down, right
 		{
+			rival_column++;
 			x++;
 			y++;
 
 			if (x > 7 || y > 7)
 				break;
 
-			if (anyAttack(config, x, y))
+			if (anyAttack(rival_column, x, y))
 				attacks++;
 		}
 
 		x = cord_i_queen;
 		y = cord_j_queen;
+		rival_column = column;
 
-		while (x <= 7 && y >= 0)
+		while (x <= 7 && y >= 0) //down, left
 		{
+			rival_column--;
 			x++;
 			y--;
 
 			if (x > 7 || y < 0)
 				break;
 
-			if (anyAttack(config, x, y))
+			if (anyAttack(rival_column, x, y))
 				attacks++;
 		}
 
 		x = cord_i_queen;
 		y = cord_j_queen;
+		rival_column = column;
 
-		while (x >= 0 && y >= 0)
+		while (x >= 0 && y >= 0) //down, left
 		{
+			rival_column--;
 			x--;
 			y--;
 
 			if (x < 0 || y < 0)
 				break;
 
-			if (anyAttack(config, x, y))
+			if (anyAttack(rival_column, x, y))
 				attacks++;
 		}
 
 		return attacks;
 	}
 
-	private boolean anyAttack(int[] board, int x, int y)
+	private boolean anyAttack(int rival_column, int x, int y)
 	{
-		// procura onde a rainha dessa coluna esta
-		int queen_board_i = board[y];
-		int queen_board_j = y;
+		//x e y representam um dos pontos que formam as diagonais
+		
+		// coordenadas da rival
+		int rival_x = config[rival_column];
+		int rival_y = rival_column;
 
-		// essa rainha ataca alguem em tal posicao?
-		if (queen_board_i == x && queen_board_j == y)
+		// se a rival estiver em x, e y ta em ataque
+		if (rival_x == x && rival_y == y)
 			return true;
 		else
 			return false;
 	}
 
-	private int getOccurrences(int[] array, int element)
-	{
-		int occurrences = 0;
-
-		for (int i : array)
-		{
-			if (i == element)
-			{
-				occurrences++;
-			}
-		}
-		return occurrences;
-	}
+	
 }

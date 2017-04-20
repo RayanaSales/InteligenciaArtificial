@@ -13,16 +13,12 @@ public class Solver
 	public static void solve(Board current)
 	{
 		boolean solved = false;
-		boolean valid = false;
 		
-		// array valido?
-		valid = Help.ValidArray(current.config);
-
-		if (valid)
+		if (current.config.length == 8)
 		{
 			queue.add(current);
 			do
-			{
+			{								
 				current = queue.remove(queue.size() - 1);
 
 				if (Help.Solved(current))
@@ -35,9 +31,9 @@ public class Solver
 					expand(current);
 					useds.add(current);
 				}
-			} while (!solved);
+			} while (!solved && !queue.isEmpty());
 		}
-		
+
 		if (solved)
 		{
 			System.out.println("SOLUCAO ENCONTRADA:");
@@ -46,20 +42,28 @@ public class Solver
 		}
 		else
 		{
-			System.out.println("Não há solução. Insira uma entrada válida.\nEntradas válidas: matrizes 8x8 onde linhas e colunas, não se repitam!");
+			if (current.config.length != 8)
+			{
+				System.out.println("Coloque 8 rainhas no tabuleiro.");
+			}
+			else
+			{
+				System.out.println("Não há solução.\nRainhas devem estar com conflitos apenas em diagonal.");
+				
+				
+			}
 		}
-
 	}
 
 	private static void expand(Board current)
 	{
-		// enquanto houver possibilidades de permutaï¿½ï¿½o
+		// enquanto houver possibilidades de permutar
 		// {
 		// -permute
 		// if !prune()
 		// {
-		// -calcule custo
-		// -add na fila (ordenado por ataques attacks - menores primeiro)
+		// 		-calcule custo
+		// 		-add na fila (ordenado por ataques attacks - menores primeiro)
 		// }
 		// }
 
@@ -72,11 +76,11 @@ public class Solver
 				Board swap = Swap(current, column, nextColumn);
 
 				swap.previous = current;
-				// if (!prune(swap))
-				// {
-				swap.countAttacks();
-				queue.add(swap);
-				// }
+				if (!prune(swap))
+				{
+					swap.countAttacks();
+					queue.add(swap);
+				}
 				nextColumn++;
 			}
 		}
@@ -87,8 +91,7 @@ public class Solver
 			@Override
 			public int compare(Board b, Board b1)
 			{
-				// -1 - less than, 1 - greater than, 0 - equal, all inversed for
-				// descending
+				// -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
 				return b.attacks > b1.attacks ? -1 : (b.attacks < b1.attacks) ? 1 : 0;
 			}
 		});

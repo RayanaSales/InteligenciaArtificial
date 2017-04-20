@@ -2,16 +2,6 @@ package solution;
 
 public class Help
 {
-	public static boolean ValidArray(int[] array)
-	{
-		if (array.length == 8)
-		{
-			return true;
-		}
-		else
-			return false;
-	}
-
 	public static boolean Solved(Board current)
 	{
 		// verifica se o array atual possui ataques = 0
@@ -33,6 +23,20 @@ public class Help
 			}
 		}
 		return true;
+	}
+	
+	protected static int getOccurrences(int[] array, int element)
+	{
+		int occurrences = 0;
+
+		for (int i : array)
+		{
+			if (i == element)
+			{
+				occurrences++;
+			}
+		}
+		return occurrences;
 	}
 
 	public static int steps = 0;
@@ -58,11 +62,11 @@ public class Help
 			}
 		}
 
-		for (int i = 0 ; i < 8; i++) 
+		for (int i = 0 ; i <= 7; i++) //linha
 		{
-			for (int j = 0; j < 8; j++)
+			for (int j = 0; j <= 7; j++) //coluna
 			{
-				if (solution.config[i] == j)
+				if (solution.config[j] == i)
 					System.out.print(" r ");
 				else
 					System.out.print(" * ");
