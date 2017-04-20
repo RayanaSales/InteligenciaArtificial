@@ -42,16 +42,14 @@ public class Solver
 		}
 		else
 		{
-			if (current.config.length != 8)
-			{
-				System.out.println("Coloque 8 rainhas no tabuleiro.");
-			}
-			else
-			{
-				System.out.println("Não há solução.\nRainhas devem estar com conflitos apenas em diagonal.");
-				
-				
-			}
+			System.out.println("NAO HA SOLUCAO.\n");
+			
+			System.out.println("FORMULACAO DO PROBLEMA:"
+						+ "\nESTADO INICIAL: Array com 8 elementos. Cada elemento representa uma rainha. As rainhas devem estar com conflitos apenas em diagonais)."
+						+ "\nESTADO OBJETIVO: Nenhuma rainha atacando outra."
+						+ "\nFUNCAO SUCESSORA: Gerar permutacoes do array atual. A permutacao com menor custo, sera o proximo movimento."
+						+ "\nFUNCAO CUSTO: O custo é definido pela quantidade de ataques totais no tabuleiro.");
+			
 		}
 	}
 
