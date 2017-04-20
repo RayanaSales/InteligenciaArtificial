@@ -32,13 +32,19 @@ public class Solver
 				expand(current);
 			}
 		} while (!queue.isEmpty() && !solved);
-
+		
 		if (solved)
 		{
-			System.out.println("Solução:");
-			Help.printSolution(current);
-			Help.steps++;
-			System.out.println("Fim! " + Help.steps + " passos executados.");
+			if(current.previous == null)
+			{
+				System.out.println("O caso que vc inseriu, ja eh a solucao =P");
+			}
+			else
+			{
+				System.out.println("Solução:");
+				Help.printSolution(current);			
+				System.out.println("Fim! " + Help.steps + " passos executados.");
+			}
 		}
 		else
 		{
