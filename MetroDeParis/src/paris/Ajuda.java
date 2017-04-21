@@ -52,28 +52,28 @@ public class Ajuda
 		estacoes.add(new Estacao(13, new ArrayList<Linha>(Arrays.asList(Linha.VERDE, Linha.VERMELHA))));
 		estacoes.add(new Estacao(14, new ArrayList<Linha>(Arrays.asList(Linha.VERDE))));
 
-		// relaciona		
+		// relaciona
 		estacoes.get(1).AdicionarProximaEstacao(estacoes.get(2));
-		
+
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(3));
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(9));
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(10));
-		
+
 		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(4));
 		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(9));
 		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(13));
-		
+
 		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(5));
 		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(8));
 		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(13));
-		
+
 		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(6));
 		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(7));
 		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(8));
-		
+
 		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(9));
 		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(12));
-		
+
 		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(11));
 
 		estacoes.get(13).AdicionarProximaEstacao(estacoes.get(14));
@@ -132,29 +132,28 @@ public class Ajuda
 		// e13 -> e14 = 10 min
 		custoReal_MIN[13][14] = 10;
 	}
-	
+
 	// GETS
 	public Estacao GetEstacao(int numero)
 	{
 		return this.estacoes.get(numero);
-	}	
-	
-	public int GetCustoLinhaRetaEmMinutos(int estacaoAtual, int estacaoDestino)
-	{
-		int linhaRetaKm = custoLinhaReta_KM[estacaoAtual][estacaoDestino];
-
-		// converte para minutos
-		return (60 * linhaRetaKm) / 30;
 	}
 
-	public int GetCustoRealEmMinutos(int estacaoAtual, int estacaoDestino)
+	public int GetCustoLinhaRetaEmMinutos(Estacao estacaoAtual, Estacao estacaoDestino)
 	{
-		int custo = custoReal_MIN[estacaoAtual][estacaoDestino];
+		int linhaRetaKm = custoLinhaReta_KM[estacaoAtual.id][estacaoDestino.id];		
+		 return (60 * linhaRetaKm) / 30;
+	}
 
-		if (custo == 0)
+	public int GetCustoRealEmMinutos(Estacao atual, Estacao proximo)
+	{
+		int custo = 0;
+
+		if (atual != null)
 		{
-			System.out.println("Nao posso ir da estacao " + estacaoAtual + " ate estacao " + estacaoDestino);
+			custo = custoReal_MIN[atual.id][proximo.id];
 		}
+
 		return custo;
 	}
 

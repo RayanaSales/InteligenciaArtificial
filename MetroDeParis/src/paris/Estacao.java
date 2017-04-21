@@ -6,8 +6,8 @@ import java.util.List;
 public class Estacao
 {
 	int id; //numero da estacao	
-		
-	int percorrido, quantoFalta, heuristica;
+	
+	int percorrido, heuristica;
 	
 	List<Linha> linhas = new ArrayList<>();;
 	
@@ -26,5 +26,12 @@ public class Estacao
 	public void AdicionarProximaEstacao(Estacao e)
 	{
 		this.proximas.add(e);
+	}
+	
+	@Override
+	public boolean equals(Object estacao)
+	{
+		Estacao e = (Estacao) estacao;		
+		return e.id == this.id;		
 	}
 }

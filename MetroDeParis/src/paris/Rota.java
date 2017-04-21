@@ -20,7 +20,7 @@ public class Rota
 
 			if (atual.id != destino.id)
 			{
-				Expandir(atual);
+				Expandir(atual, destino);
 				Ordenar();
 			}
 
@@ -29,17 +29,22 @@ public class Rota
 		ImprimeSolucao(atual);
 	}
 
-	private void Expandir(Estacao atual)
+	private void Expandir(Estacao atual, Estacao destino)
 	{
 		for (Estacao proxima : atual.proximas)
 		{
+			//Percorrido é o custo real ate o atual, heurística eh a distância em linha reta até o objetivo
+			
 			proxima.anterior = atual;
-			proxima.percorrido += AJUDA.GetCustoRealEmMinutos(atual.id, proxima.id);
-			proxima.quantoFalta = AJUDA.GetCustoLinhaRetaEmMinutos(atual.id, proxima.id);
-			proxima.heuristica = proxima.percorrido + proxima.quantoFalta;
+			proxima.percorrido = atual.percorrido + AJUDA.GetCustoRealEmMinutos(atual, proxima);			
+			proxima.heuristica = AJUDA.GetCustoLinhaRetaEmMinutos(proxima, destino);
+			
+			//poda do pai
+			if(proxima.id != proxima.anterior.id)
+			{
+				fila.add(proxima);
+			}
 		}
-
-		fila.addAll(atual.proximas);
 	}
 
 	private void Ordenar()
@@ -49,8 +54,11 @@ public class Rota
 			public int compare(Object o1, Object o2)
 			{
 				Estacao e1 = (Estacao) o1;	
-				Estacao e2 = (Estacao) o2;				
-				return e1.heuristica < e2.heuristica ? -1 : (e1.heuristica < e2.heuristica ? +1 : 0);
+				Estacao e2 = (Estacao) o2;	
+				
+				int custo1 = e1.percorrido + e1.heuristica;
+				int custo2 = e2.percorrido + e2.heuristica;
+				return custo1 < custo2 ? -1 : (custo1 < custo2 ? +1 : 0);
 			}
 		});
 	}
@@ -62,6 +70,6 @@ public class Rota
 			ImprimeSolucao(estacao.anterior);
 		}		
 		
-		System.out.println("E" + estacao.id + " tempo(min) " + estacao.heuristica);
+		System.out.println("E" + estacao.id + " tempo (minutos): " + estacao.percorrido);
 	}
 }
