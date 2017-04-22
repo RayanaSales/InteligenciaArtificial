@@ -56,7 +56,7 @@ public class Rota
 		}
 		return custo;
 	}
-
+	
 	private void Ordenar()
 	{
 		Collections.sort(fila, new Comparator<Object>()
