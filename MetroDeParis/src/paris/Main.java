@@ -7,7 +7,7 @@ public class Main
 		Rota rota = new Rota();
 		
 		Estacao atual = rota.AJUDA.GetEstacao(1);
-		Estacao destino = rota.AJUDA.GetEstacao(14);
+		Estacao destino = rota.AJUDA.GetEstacao(11);
 		
 		rota.Buscar(atual, destino);
 	}

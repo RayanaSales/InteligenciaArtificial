@@ -55,45 +55,51 @@ public class Ajuda
 		//RELACIONA PROXIMOS
 		estacoes.get(1).AdicionarProximaEstacao(estacoes.get(2));
 
+		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(1));
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(3));
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(9));
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(10));
-		
-		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(4));		
+
+		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(2));
+		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(4));
+		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(9));
 		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(13));
+
+		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(3));
+		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(5));
+		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(8));
+		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(13));
+
+		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(4));
+		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(6));
+		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(7));
+		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(8));
 		
+		estacoes.get(6).AdicionarProximaEstacao(estacoes.get(5));
+		
+		estacoes.get(7).AdicionarProximaEstacao(estacoes.get(5));
+
+		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(4));
+		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(5));
+		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(9));
+		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(12));
+
+		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(2));
+		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(3));
 		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(8));
 		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(11));
 		
+		estacoes.get(10).AdicionarProximaEstacao(estacoes.get(2));
+		
+		estacoes.get(11).AdicionarProximaEstacao(estacoes.get(9));
+		
+		estacoes.get(12).AdicionarProximaEstacao(estacoes.get(8));
+
+		estacoes.get(13).AdicionarProximaEstacao(estacoes.get(3));
+		estacoes.get(13).AdicionarProximaEstacao(estacoes.get(4));
 		estacoes.get(13).AdicionarProximaEstacao(estacoes.get(14));
 		
-		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(5));
-		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(12));
-		
-		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(6));
-		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(7));
-
-
-		// //RELACIONA ANTERIORES
-		estacoes.get(2).anterior = estacoes.get(1);
-		
-		estacoes.get(3).anterior = estacoes.get(2);
-		estacoes.get(9).anterior = estacoes.get(2);
-		estacoes.get(10).anterior = estacoes.get(2);
-
-		estacoes.get(4).anterior = estacoes.get(3);
-		estacoes.get(13).anterior = estacoes.get(3);
-		
-		estacoes.get(8).anterior = estacoes.get(9);
-		estacoes.get(11).anterior = estacoes.get(9);
-		
-		estacoes.get(14).anterior = estacoes.get(13);
-		
-		estacoes.get(12).anterior = estacoes.get(8);
-		estacoes.get(5).anterior = estacoes.get(8);
-		
-		estacoes.get(7).anterior = estacoes.get(5);
-		estacoes.get(6).anterior = estacoes.get(5);
+		estacoes.get(14).AdicionarProximaEstacao(estacoes.get(13));
 	}
 
 	private void PopularCustoReal()

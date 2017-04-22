@@ -8,77 +8,80 @@ import java.util.List;
 public class Rota
 {
 	public final Ajuda AJUDA = new Ajuda();
-	List<Estacao> fila = new ArrayList<>();
+	List<No> fila = new ArrayList<>();
 
-	public void Buscar(Estacao atual, Estacao destino)
+	public void Buscar(Estacao estacaoAtual, Estacao estacaoDestino)
 	{
+		No atual = new No(estacaoAtual);
 		fila.add(atual);
 
 		do
 		{
 			atual = fila.remove(0);
-			Expandir(atual, destino);
+			Expandir(atual, estacaoDestino);
 			Ordenar();
 
-		} while (atual.id != destino.id);
+		} while (atual.estacao.id != estacaoDestino.id);
 
 		ImprimeSolucao(atual);
 	}
 
-	private void Expandir(Estacao atual, Estacao destino)
+	private void Expandir(No atual, Estacao destino)
 	{
-		for (Estacao proxima : atual.proximas)
+		for (Estacao proxima : atual.estacao.proximas)
 		{
-			if (atual.anterior == null || proxima.id != atual.anterior.id)
+			if (atual.anterior == null || proxima.id != atual.anterior.estacao.id)
 			{
-				proxima.anterior = atual;	
-				proxima.percorrido = atual.percorrido + AJUDA.GetCustoRealEmMinutos(atual, proxima);
+				No no = new No(proxima);
+
+				no.anterior = atual;
+				no.percorrido = atual.percorrido + AJUDA.GetCustoRealEmMinutos(atual.estacao, proxima);
+				no.percorrido += TrocarLinha(no);
+
 				proxima.heuristica = AJUDA.GetCustoLinhaRetaEmMinutos(proxima, destino);
 
-				proxima.percorrido += TrocarLinha(proxima);
-
-				fila.add(proxima);
+				fila.add(no);
 			}
 		}
 	}
 
-	private int TrocarLinha(Estacao proxima)
+	private int TrocarLinha(No no)
 	{
 		int custo = 0;
 
-		if (proxima.anterior != null && proxima.anterior.anterior != null)
+		if (no.anterior != null && no.anterior.anterior != null)
 		{
-			Linha linha = proxima.anterior.getLinhasIguais(proxima.anterior.anterior);
-			if (!proxima.linhas.contains(linha))
+			Linha linha = no.anterior.estacao.getLinhasIguais(no.anterior.anterior.estacao);
+			if (!no.estacao.linhas.contains(linha))
 			{
 				custo = 5;
 			}
 		}
 		return custo;
 	}
-	
+
 	private void Ordenar()
 	{
 		Collections.sort(fila, new Comparator<Object>()
 		{
 			public int compare(Object o1, Object o2)
 			{
-				Estacao e1 = (Estacao) o1;
-				Estacao e2 = (Estacao) o2;
-				int custo1 = e1.percorrido + e1.heuristica;
-				int custo2 = e2.percorrido + e2.heuristica;
+				No e1 = (No) o1;
+				No e2 = (No) o2;
+				int custo1 = e1.percorrido + e1.estacao.heuristica;
+				int custo2 = e2.percorrido + e2.estacao.heuristica;
 				return custo1 < custo2 ? -1 : (custo1 < custo2 ? +1 : 0);
 			}
 		});
 	}
 
-	private void ImprimeSolucao(Estacao estacao)
+	private void ImprimeSolucao(No no)
 	{
-		if (estacao.anterior != null)
+		if (no.anterior != null)
 		{
-			ImprimeSolucao(estacao.anterior);
+			ImprimeSolucao(no.anterior);
 		}
 
-		System.out.println("E" + estacao.id + " tempo (minutos): " + estacao.percorrido);
+		System.out.println("E" + no.estacao.id + " tempo (minutos): " + no.percorrido);
 	}
 }
