@@ -37,7 +37,7 @@ public class Ajuda
 	{
 		// criando estacoes
 		estacoes.add(null);
-		estacoes.add(new Estacao(1, new ArrayList<Linha>(Arrays.asList(Linha.AMARELA))));
+		estacoes.add(new Estacao(1, new ArrayList<Linha>(Arrays.asList(Linha.AZUL))));
 		estacoes.add(new Estacao(2, new ArrayList<Linha>(Arrays.asList(Linha.AMARELA, Linha.AZUL))));
 		estacoes.add(new Estacao(3, new ArrayList<Linha>(Arrays.asList(Linha.VERMELHA, Linha.AZUL))));
 		estacoes.add(new Estacao(4, new ArrayList<Linha>(Arrays.asList(Linha.VERDE, Linha.AZUL))));
@@ -55,82 +55,122 @@ public class Ajuda
 		// relaciona
 		estacoes.get(1).AdicionarProximaEstacao(estacoes.get(2));
 
+		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(1));
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(3));
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(9));
 		estacoes.get(2).AdicionarProximaEstacao(estacoes.get(10));
 
+		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(2));
 		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(4));
 		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(9));
 		estacoes.get(3).AdicionarProximaEstacao(estacoes.get(13));
 
+		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(3));
 		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(5));
 		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(8));
 		estacoes.get(4).AdicionarProximaEstacao(estacoes.get(13));
 
+		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(4));
 		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(6));
 		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(7));
 		estacoes.get(5).AdicionarProximaEstacao(estacoes.get(8));
+		
+		estacoes.get(6).AdicionarProximaEstacao(estacoes.get(5));
+		
+		estacoes.get(7).AdicionarProximaEstacao(estacoes.get(5));
 
+		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(4));
+		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(5));
 		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(9));
 		estacoes.get(8).AdicionarProximaEstacao(estacoes.get(12));
 
+		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(2));
+		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(3));
+		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(8));
 		estacoes.get(9).AdicionarProximaEstacao(estacoes.get(11));
+		
+		estacoes.get(10).AdicionarProximaEstacao(estacoes.get(2));
+		
+		estacoes.get(11).AdicionarProximaEstacao(estacoes.get(9));
+		
+		estacoes.get(12).AdicionarProximaEstacao(estacoes.get(8));
 
+		estacoes.get(13).AdicionarProximaEstacao(estacoes.get(3));
+		estacoes.get(13).AdicionarProximaEstacao(estacoes.get(4));
 		estacoes.get(13).AdicionarProximaEstacao(estacoes.get(14));
+		
+		estacoes.get(14).AdicionarProximaEstacao(estacoes.get(13));
 	}
 
 	private void PopularCustoReal()
 	{
 		// e1 -> e2 = 22 min
 		custoReal_MIN[1][2] = 22;
+		custoReal_MIN[2][1] = 22;
 
 		// e2 -> e3 = 18 min
 		custoReal_MIN[2][3] = 18;
+		custoReal_MIN[3][2] = 18;
 
 		// e2 -> e9 = 22 min
 		custoReal_MIN[2][9] = 22;
+		custoReal_MIN[9][2] = 22;
 
 		// e2 -> e10 = 8 min
 		custoReal_MIN[2][10] = 8;
+		custoReal_MIN[10][2] = 8;
 
 		// e3 -> e4 = 14 min
 		custoReal_MIN[3][4] = 14;
+		custoReal_MIN[4][3] = 14;
 
 		// e3 -> e9 = 20 min
 		custoReal_MIN[3][9] = 20;
+		custoReal_MIN[9][3] = 20;
 
 		// e3 -> e13 = 38 min
 		custoReal_MIN[3][13] = 38;
+		custoReal_MIN[13][3] = 38;
 
 		// e4 -> e5 = 28 min
 		custoReal_MIN[4][5] = 28;
+		custoReal_MIN[5][4] = 28;
 
 		// e4 -> e8 = 32 min
 		custoReal_MIN[4][8] = 32;
+		custoReal_MIN[8][4] = 32;
 
 		// e4 -> e13 = 24 min
 		custoReal_MIN[4][13] = 24;
+		custoReal_MIN[13][4] = 24;
 
 		// e5 -> e6 = 6 min
 		custoReal_MIN[5][6] = 6;
+		custoReal_MIN[6][5] = 6;
 
 		// e5 -> e7 = 4 min
 		custoReal_MIN[5][7] = 4;
+		custoReal_MIN[7][5] = 4;
 
 		// e5 -> e8 = 66 min
 		custoReal_MIN[5][8] = 66;
+		custoReal_MIN[8][5] = 66;
 
 		// e8 -> e9 = 20 min
 		custoReal_MIN[8][9] = 20;
+		custoReal_MIN[9][8] = 20;
 
 		// e8 -> e12 = 14 min
 		custoReal_MIN[8][12] = 14;
+		custoReal_MIN[12][8] = 14;
 
 		// e9 -> e11 = 28 min
 		custoReal_MIN[9][11] = 28;
+		custoReal_MIN[11][9] = 28;
 
 		// e13 -> e14 = 10 min
 		custoReal_MIN[13][14] = 10;
+		custoReal_MIN[14][13] = 10;
 	}
 
 	// GETS
@@ -141,19 +181,13 @@ public class Ajuda
 
 	public int GetCustoLinhaRetaEmMinutos(Estacao estacaoAtual, Estacao estacaoDestino)
 	{
-		int linhaRetaKm = custoLinhaReta_KM[estacaoAtual.id][estacaoDestino.id];		
-		 return (60 * linhaRetaKm) / 30;
+		int linhaRetaKm = custoLinhaReta_KM[estacaoAtual.id][estacaoDestino.id];
+		return linhaRetaKm * 2;
 	}
 
 	public int GetCustoRealEmMinutos(Estacao atual, Estacao proximo)
 	{
-		int custo = 0;
-
-		if (atual != null)
-		{
-			custo = custoReal_MIN[atual.id][proximo.id];
-		}
-
+		int custo = custoReal_MIN[atual.id][proximo.id];
 		return custo;
 	}
 

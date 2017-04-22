@@ -29,18 +29,32 @@ public class Rota
 	{
 		for (Estacao proxima : atual.proximas)
 		{
-			// Percorrido é o custo real ate o atual, heurística eh a distância em linha reta até o objetivo
-
-			proxima.anterior = atual;
-			proxima.percorrido = atual.percorrido + AJUDA.GetCustoRealEmMinutos(atual, proxima);
-			proxima.heuristica = AJUDA.GetCustoLinhaRetaEmMinutos(proxima, destino);
-
-			// poda do pai
-			if (proxima.id != proxima.anterior.id)
+			if (atual.anterior == null || proxima.id != atual.anterior.id)
 			{
+				proxima.anterior = atual;	
+				proxima.percorrido = atual.percorrido + AJUDA.GetCustoRealEmMinutos(atual, proxima);
+				proxima.heuristica = AJUDA.GetCustoLinhaRetaEmMinutos(proxima, destino);
+
+				proxima.percorrido += TrocarLinha(proxima);
+
 				fila.add(proxima);
 			}
 		}
+	}
+
+	private int TrocarLinha(Estacao proxima)
+	{
+		int custo = 0;
+
+		if (proxima.anterior != null && proxima.anterior.anterior != null)
+		{
+			Linha linha = proxima.anterior.getLinhasIguais(proxima.anterior.anterior);
+			if (!proxima.linhas.contains(linha))
+			{
+				custo = 5;
+			}
+		}
+		return custo;
 	}
 
 	private void Ordenar()
@@ -51,7 +65,6 @@ public class Rota
 			{
 				Estacao e1 = (Estacao) o1;
 				Estacao e2 = (Estacao) o2;
-
 				int custo1 = e1.percorrido + e1.heuristica;
 				int custo2 = e2.percorrido + e2.heuristica;
 				return custo1 < custo2 ? -1 : (custo1 < custo2 ? +1 : 0);
