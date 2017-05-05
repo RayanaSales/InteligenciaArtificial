@@ -33,7 +33,7 @@ public class Help
 		}
 	}
 
-	public static int steps = 1;
+	public static int steps = 0;
 
 	// recursao. Se vc tem um pai, chame ele.
 	protected static void printSolution(Quadrant solution)
