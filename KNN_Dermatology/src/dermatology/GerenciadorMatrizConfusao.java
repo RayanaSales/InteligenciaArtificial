@@ -1,8 +1,15 @@
 package dermatology;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 
 public class GerenciadorMatrizConfusao
 {
@@ -24,13 +31,76 @@ public class GerenciadorMatrizConfusao
 
 	private MatrizConfusao buscarMatriz(int id)
 	{		
-		Predicate<MatrizConfusao> predicate = c-> c.id == id;
-		MatrizConfusao obj = this.matrizes.stream().filter(predicate).findFirst().get();
+		MatrizConfusao obj = null;
+		
+		for (MatrizConfusao matrizConfusao : matrizes)
+		{
+			if(matrizConfusao.id == id)
+			{
+				obj = matrizConfusao;
+			}
+		}
+		
 		return obj;
 	}
 	
 	public void ImprimirMatrizes()
 	{
-		/* parei aqui */
+		for (MatrizConfusao matrizConfusao : matrizes)
+		{
+			for(int i = 0; i<7 ; i++)
+			{
+				for(int j=0 ; j<7 ; j++)
+				{
+					System.out.print(matrizConfusao.matriz[i][j] + "\t\t");
+				}
+				System.out.println();
+			}
+		}
+	}
+	
+	public void CriarXLS()
+	{	/*
+			https://sourceforge.net/projects/jexcelapi/files/jexcelapi/2.6.12/
+			https://jmmwrite.wordpress.com/2011/02/09/gerar-xls-planilha-excell-com-java/
+	 	*/
+		
+		int i = 0, i_anterior = i;
+		try
+		{
+			WritableWorkbook workbook = Workbook.createWorkbook(new File("RESULTADO.xls"));
+			WritableSheet sheet = workbook.createSheet("Folha", 0);
+						
+			for (MatrizConfusao matrizConfusao : matrizes)
+			{
+				i_anterior += i;
+				System.out.println("imprimindo matriz " + matrizConfusao.id);
+				for (i = i_anterior; i < 7; i++)
+				{					
+					for (int j = 0; j < 7; j++)
+					{
+						Label label = new Label(i, j, matrizConfusao.matriz[i][j]);
+						sheet.addCell(label);
+					}	
+				}	
+				
+			}
+			workbook.write();
+			workbook.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (RowsExceededException e)
+		{
+			e.printStackTrace();
+		}
+		catch (WriteException e)
+		{
+			e.printStackTrace();
+		}
+		
+		System.out.println("Verifique o arquivo de saida...");
 	}
 }

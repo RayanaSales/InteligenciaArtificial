@@ -16,23 +16,27 @@ public class Classificador
 	private List<Tupla> treinamento = new ArrayList<Tupla>();
 	public static List<Tupla> teste = new ArrayList<Tupla>();	
 
-	public void Classificar(Tupla teste) throws IOException
+	public void Classificar(Tupla teste) throws IOException, InterruptedException
 	{
 		CalcularDistancias(teste);
 		MontarMatrizConfusao(teste.RESPOSTA_REAL);
 	}
 	
-	private void CalcularDistancias(Tupla teste)
+	private void CalcularDistancias(Tupla teste) throws InterruptedException
 	{
 		// for each elementoTreinamento in tabela_treinamento
 		//		calcule a distancia de teste para elementoTreinamento
-		//		guarde o resultado no objeto distância, insira esse obj em uma lista		
+		//		guarde o resultado no objeto distância, insira esse obj em uma lista	
+		
+		System.out.println("Calculando distancias...");
 		
 		for (Tupla tupla : treinamento)
 		{
+			Thread.sleep(300);
 			DistanciaEuclidiana distancia = new DistanciaEuclidiana(tupla, teste);
 			distancia.Calcular();
 			distancias.add(distancia);
+			Thread.sleep(300);
 		}
 		
 		//ordene a lista pela distância
@@ -42,7 +46,7 @@ public class Classificador
 			public int compare(DistanciaEuclidiana b, DistanciaEuclidiana b1)
 			{
 				// -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-				return b.resultado > b1.resultado ? -1 : (b.resultado < b1.resultado) ? 1 : 0;
+				return b1.resultado > b.resultado ? -1 : (b1.resultado < b.resultado) ? 1 : 0;
 			}
 		});
 	}
@@ -55,11 +59,20 @@ public class Classificador
 		//		pegue no banco, a resposta_correta de Ti
 		//		compare os resultados e atualize o objeto matrizConfusao onde id = k
 		
+		System.out.println("Classificando...");
+		
 		for (int k= 1; k <= 11 ; k = k + 2)
 		{
-			List<DistanciaEuclidiana> proximos = distancias.subList(0, k);
-			Diagnostico resultadoClassificacao = AcharMaisComum(proximos);
-			Main.MATRIZ_CONFUSAO.InserirResultado(k, RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
+			if(k < distancias.size())
+			{
+				List<DistanciaEuclidiana> proximos = distancias.subList(0, k);
+				Diagnostico resultadoClassificacao = AcharMaisComum(proximos);
+				Main.MATRIZ_CONFUSAO.InserirResultado(k, RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 		
@@ -94,15 +107,18 @@ public class Classificador
 		}
 		in.close();
 		
-		//sorteia que eh teste e quem eh treinamento		
+		//sorteia que eh teste e quem eh treinamento	
+		int QTD_ELEMENTOS_TESTE = Math.round((treinamento.size() * 20) / 100);		
 		Random random = new Random();   
-		for(int i = 0 ; i< Main.TUPLAS_TESTE ; i++)
+		
+		for(int i = 0 ; i< QTD_ELEMENTOS_TESTE ; i++)
 		{			     
-            int sorteado = random.nextInt(358); 
+            int sorteado = random.nextInt(10); 
             Tupla tupla = BuscarElemento(sorteado, treinamento);
             teste.add(tupla);
             treinamento.remove(tupla);                       
 		}
+		System.out.println("Preparando ambiente...");
 	}
 	
 	private Tupla BuscarElemento(int id, List<Tupla> dataset)
