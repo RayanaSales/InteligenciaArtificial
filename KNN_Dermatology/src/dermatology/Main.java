@@ -1,23 +1,34 @@
 package dermatology;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Main
 {
 	//TOTAL = 358
 	public static GerenciadorMatrizConfusao MATRIZ_CONFUSAO = new GerenciadorMatrizConfusao();
 	
-	public static int TUPLAS_TESTE = 10;
-	public static int TUPLAS_TREINAMENTO = 348;
+	public static int QTD_ELEMENTOS_DISPONIVEIS = 344;
+	public static int TESTE_PORCENTAGEM = 30;
 	
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
 		Classificador classificador = new Classificador();
+		
+		System.out.println("Preparando ambiente...");
 		classificador.PrepararAmbiente();
 		
-		classificador.Classificar(Classificador.teste.get(0));
+		System.out.println("Classificando...");
 		
-		//MATRIZ_CONFUSAO.ImprimirMatrizes();
+		Classificador.teste.removeIf(Objects::isNull);
+		for (Tupla tupla : Classificador.teste)
+		{
+			if(tupla != null) //WORK AROUND
+			{
+				classificador.Classificar(tupla);
+			}
+		}
+	
 		MATRIZ_CONFUSAO.CriarXLS();
 	}
 

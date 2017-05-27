@@ -30,27 +30,27 @@ public class GerenciadorMatrizConfusao
 	}
 
 	private MatrizConfusao buscarMatriz(int id)
-	{		
+	{
 		MatrizConfusao obj = null;
-		
+
 		for (MatrizConfusao matrizConfusao : matrizes)
 		{
-			if(matrizConfusao.id == id)
+			if (matrizConfusao.id == id)
 			{
 				obj = matrizConfusao;
 			}
 		}
-		
+
 		return obj;
 	}
-	
+
 	public void ImprimirMatrizes()
 	{
 		for (MatrizConfusao matrizConfusao : matrizes)
 		{
-			for(int i = 0; i<7 ; i++)
+			for (int i = 0; i < 7; i++)
 			{
-				for(int j=0 ; j<7 ; j++)
+				for (int j = 0; j < 7; j++)
 				{
 					System.out.print(matrizConfusao.matriz[i][j] + "\t\t");
 				}
@@ -58,35 +58,33 @@ public class GerenciadorMatrizConfusao
 			}
 		}
 	}
-	
+
 	public void CriarXLS()
-	{	/*
-			https://sourceforge.net/projects/jexcelapi/files/jexcelapi/2.6.12/
-			https://jmmwrite.wordpress.com/2011/02/09/gerar-xls-planilha-excell-com-java/
-	 	*/
-		
-		int i = 0, i_anterior = i;
+	{ /*
+		 * https://sourceforge.net/projects/jexcelapi/files/jexcelapi/2.6.12/
+		 * https://jmmwrite.wordpress.com/2011/02/09/gerar-xls-planilha-excell-com-java/
+		 */
+
 		try
 		{
-			WritableWorkbook workbook = Workbook.createWorkbook(new File("RESULTADO.xls"));
-			WritableSheet sheet = workbook.createSheet("Folha", 0);
-						
-			for (MatrizConfusao matrizConfusao : matrizes)
+			for (MatrizConfusao matriz : matrizes)
 			{
-				i_anterior += i;
-				System.out.println("imprimindo matriz " + matrizConfusao.id);
-				for (i = i_anterior; i < 7; i++)
-				{					
+				WritableWorkbook workbook = Workbook.createWorkbook(new File("RESULTADO_K" + matriz.id + ".xls"));
+				WritableSheet sheet = workbook.createSheet("k = " + matriz.id, 0);
+
+				System.out.println("imprimindo matriz " + matriz.id + "no arquivo: RESULTADO_K" + matriz.id + ".xls" );
+				for (int i = 0; i < 7; i++)
+				{
 					for (int j = 0; j < 7; j++)
 					{
-						Label label = new Label(i, j, matrizConfusao.matriz[i][j]);
+						Label label = new Label(i, j, matriz.matriz[i][j]);
 						sheet.addCell(label);
-					}	
-				}	
-				
+					}
+				}
+				workbook.write();
+				workbook.close();
 			}
-			workbook.write();
-			workbook.close();
+
 		}
 		catch (IOException e)
 		{
@@ -100,7 +98,7 @@ public class GerenciadorMatrizConfusao
 		{
 			e.printStackTrace();
 		}
-		
-		System.out.println("Verifique o arquivo de saida...");
+
+		System.out.println("Verifique o diretorio git\\InteligenciaArtificial\\KNN_Dermatology...");
 	}
 }

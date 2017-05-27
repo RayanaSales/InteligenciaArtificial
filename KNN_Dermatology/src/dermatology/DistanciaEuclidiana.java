@@ -4,12 +4,13 @@ public class DistanciaEuclidiana
 {
 	Tupla atual;
 	Tupla teste;
-	double resultado;
+	double distancia;
 	
 	public DistanciaEuclidiana(Tupla atual, Tupla teste)
 	{
 		this.atual = atual;
 		this.teste = teste;
+		Calcular();
 	}
 	
 	public double Calcular()
@@ -49,7 +50,7 @@ public class DistanciaEuclidiana
 		double age = Math.pow(teste.age - atual.age, 2);
 		double kneeAndElbowInvolvement = Math.pow(teste.kneeAndElbowInvolvement - atual.kneeAndElbowInvolvement, 2);
 		
-		this.resultado = erythema + scaling + definiteBorders + itching + koebnerPhenomenon + polygonalPapules +
+		this.distancia = erythema + scaling + definiteBorders + itching + koebnerPhenomenon + polygonalPapules +
 				follicularPapules + oralMucosalInvolvement + scalpInvolvement + familyHistory + melaninIncontinence +
 				eosinophilsInfiltrate + PNL_Infiltrate + fibrosisPapillaryDermis + exocytosis + acanthosis + 
 				hyperkeratosis + parakeratosis + clubbingReteRidges + elongationReteRidges + thinningSuprapapillaryEpidermis +
@@ -57,6 +58,6 @@ public class DistanciaEuclidiana
 				spongiosis + sawToothAppearanceRetes + follicularHornPlug + perifollicularParakeratosis + inflammatoryMonoluclearInflitrate +
 				bandLikeInfiltrate + age + kneeAndElbowInvolvement;
 		
-		return Math.sqrt(this.resultado);
+		return Math.sqrt(this.distancia);
 	}
 }

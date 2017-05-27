@@ -13,7 +13,7 @@ import java.util.Random;
 public class Classificador
 {
 	private List<DistanciaEuclidiana> distancias = new ArrayList<DistanciaEuclidiana>();
-	private List<Tupla> treinamento = new ArrayList<Tupla>();
+	public static List<Tupla> treinamento = new ArrayList<Tupla>();
 	public static List<Tupla> teste = new ArrayList<Tupla>();	
 
 	public void Classificar(Tupla teste) throws IOException, InterruptedException
@@ -26,17 +26,12 @@ public class Classificador
 	{
 		// for each elementoTreinamento in tabela_treinamento
 		//		calcule a distancia de teste para elementoTreinamento
-		//		guarde o resultado no objeto distância, insira esse obj em uma lista	
-		
-		System.out.println("Calculando distancias...");
-		
+		//		guarde o distancia no objeto distância, insira esse obj em uma lista	
+				
 		for (Tupla tupla : treinamento)
-		{
-			Thread.sleep(300);
-			DistanciaEuclidiana distancia = new DistanciaEuclidiana(tupla, teste);
-			distancia.Calcular();
+		{			
+			DistanciaEuclidiana distancia = new DistanciaEuclidiana(tupla, teste);			
 			distancias.add(distancia);
-			Thread.sleep(300);
 		}
 		
 		//ordene a lista pela distância
@@ -46,7 +41,7 @@ public class Classificador
 			public int compare(DistanciaEuclidiana b, DistanciaEuclidiana b1)
 			{
 				// -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-				return b1.resultado > b.resultado ? -1 : (b1.resultado < b.resultado) ? 1 : 0;
+				return b1.distancia > b.distancia ? -1 : (b1.distancia < b.distancia) ? 1 : 0;
 			}
 		});
 	}
@@ -58,9 +53,7 @@ public class Classificador
 		//		qual a doença mais comum entre os k primeiros? (resposta_classific)
 		//		pegue no banco, a resposta_correta de Ti
 		//		compare os resultados e atualize o objeto matrizConfusao onde id = k
-		
-		System.out.println("Classificando...");
-		
+						
 		for (int k= 1; k <= 11 ; k = k + 2)
 		{
 			if(k < distancias.size())
@@ -90,35 +83,44 @@ public class Classificador
 		
 		String line;
 		int id = 1;
-		while((line = in.readLine()) != null)
+		Tupla tupla = null;
+		int[] data = null;
+		try
 		{
-		    //System.out.println(line);
-			String[] dataString = line.split(",");
-			int[] data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
-			
-			Diagnostico diagnosticoReal = Diagnostico.values()[data[34]];
-			
-			Tupla tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
-					data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 
-					data[25], data[26], data[27], data[28], data[29], data[30], data[31], data[32], data[33], diagnosticoReal);
-			
-			treinamento.add(tupla);
-			id++;
-		}
+			while((line = in.readLine()) != null)
+			{
+				String[] dataString = line.split(",");
+				data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
+				
+				Diagnostico diagnosticoReal = Diagnostico.values()[data[34] - 1]; //pq os elementos do diagnostico vao de 0 a 5. Mas no arquivo esta de 1 a 6
+				
+				tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
+						data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 
+						data[25], data[26], data[27], data[28], data[29], data[30], data[31], data[32], data[33], diagnosticoReal);
+				
+				treinamento.add(tupla);
+				id++;
+			}
 		in.close();
+		}catch(ArrayIndexOutOfBoundsException e)
+		{
+			System.out.println("Causa do erro: " + e.getCause());
+			System.out.println("Registro problematico id = " + tupla.id + " data length: " + data.length);
+			System.out.println(data.toString());
+			System.out.println();
+		}
 		
 		//sorteia que eh teste e quem eh treinamento	
-		int QTD_ELEMENTOS_TESTE = Math.round((treinamento.size() * 20) / 100);		
-		Random random = new Random();   
+		int QTD_ELEMENTOS_PARA_TESTE = Math.round((treinamento.size() * Main.TESTE_PORCENTAGEM) / 100);
 		
-		for(int i = 0 ; i< QTD_ELEMENTOS_TESTE ; i++)
+		Random random = new Random();   		
+		for(int i = 0 ; i< QTD_ELEMENTOS_PARA_TESTE ; i++)
 		{			     
-            int sorteado = random.nextInt(10); 
-            Tupla tupla = BuscarElemento(sorteado, treinamento);
+            int sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS); 
+            tupla = BuscarElemento(sorteado, treinamento);
             teste.add(tupla);
             treinamento.remove(tupla);                       
-		}
-		System.out.println("Preparando ambiente...");
+		}		
 	}
 	
 	private Tupla BuscarElemento(int id, List<Tupla> dataset)
@@ -135,15 +137,17 @@ public class Classificador
 	
 	private Diagnostico AcharMaisComum(List<DistanciaEuclidiana> proximos)
 	{
+		long popularidade = 0;		
 		List<Popular> populares = new ArrayList<Popular>();
 		
-		populares.add(new Popular(Diagnostico.PSORIASIS, Collections.frequency(proximos, Diagnostico.PSORIASIS)));
-		populares.add(new Popular(Diagnostico.SEBOREIC_DERMATITIS, Collections.frequency(proximos, Diagnostico.SEBOREIC_DERMATITIS)));
-		populares.add(new Popular(Diagnostico.LICHEN_PLANUS, Collections.frequency(proximos, Diagnostico.LICHEN_PLANUS)));
-		populares.add(new Popular(Diagnostico.PITYRIASIS_ROSEA, Collections.frequency(proximos, Diagnostico.PITYRIASIS_ROSEA)));
-		populares.add(new Popular(Diagnostico.CRONIC_DERMATITIS, Collections.frequency(proximos, Diagnostico.CRONIC_DERMATITIS)));
-		populares.add(new Popular(Diagnostico.PITYRIASIS_RUBRA_PILARIS, Collections.frequency(proximos, Diagnostico.PITYRIASIS_RUBRA_PILARIS)));
-		
+		for (Diagnostico d : Diagnostico.values())
+		{
+			popularidade = proximos.stream()
+			        .filter(p -> p.teste.RESPOSTA_REAL.equals(d))
+			        .count();			
+			populares.add(new Popular(d, popularidade));	
+		}		
+				
 		//ordene a lista pela popularidade
 		Collections.sort(populares, new Comparator<Popular>()
 		{
@@ -161,10 +165,10 @@ public class Classificador
 
 class Popular 
 {
-	int popularidade;
+	long popularidade;
 	Diagnostico diagnostico;
 	
-	public Popular(Diagnostico diagnostico, int popularidade)
+	public Popular(Diagnostico diagnostico, long popularidade)
 	{
 		this.popularidade = popularidade;
 		this.diagnostico = diagnostico;
