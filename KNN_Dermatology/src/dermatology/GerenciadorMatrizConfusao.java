@@ -57,14 +57,15 @@ public class GerenciadorMatrizConfusao
 				System.out.println();
 			}
 		}
-	}
-
+	}	
+	
 	public void CriarXLS()
 	{ /*
 		 * https://sourceforge.net/projects/jexcelapi/files/jexcelapi/2.6.12/
 		 * https://jmmwrite.wordpress.com/2011/02/09/gerar-xls-planilha-excell-com-java/
 		 */
 
+		int i = 0, j = 0;
 		try
 		{
 			for (MatrizConfusao matriz : matrizes)
@@ -72,10 +73,10 @@ public class GerenciadorMatrizConfusao
 				WritableWorkbook workbook = Workbook.createWorkbook(new File("RESULTADO_K" + matriz.id + ".xls"));
 				WritableSheet sheet = workbook.createSheet("k = " + matriz.id, 0);
 
-				System.out.println("imprimindo matriz " + matriz.id + "no arquivo: RESULTADO_K" + matriz.id + ".xls" );
-				for (int i = 0; i < 7; i++)
+				System.out.println("Imprimindo matriz " + matriz.id + " no arquivo: RESULTADO_K" + matriz.id + ".xls" );
+				for (i = 0; i < 7; i++)
 				{
-					for (int j = 0; j < 7; j++)
+					for (j = 0; j < 7; j++)
 					{
 						Label label = new Label(i, j, matriz.matriz[i][j]);
 						sheet.addCell(label);

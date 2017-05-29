@@ -78,15 +78,18 @@ public class Classificador
 		 * 3- coloca esse objeto em uma lista de tuplas 
 		 * 4- divide essa lista: sorteia 70 por cento para aprender, e 30 para testar
 		 */
+		Random random = new Random();
 		
-		BufferedReader in = new BufferedReader(new FileReader("dermatology.data"));
-		
+		int QTD_ELEMENTOS_PARA_TESTE = Math.round((treinamento.size() * Main.TESTE_PORCENTAGEM) / 100);		 
+		int sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS);		
+		List<Integer> sorteados = new ArrayList<>();
+				
+		BufferedReader in = new BufferedReader(new FileReader("dermatology.data"));		
 		String line;
 		int id = 1;
 		Tupla tupla = null;
 		int[] data = null;
-		try
-		{
+		
 			while((line = in.readLine()) != null)
 			{
 				String[] dataString = line.split(",");
@@ -102,24 +105,23 @@ public class Classificador
 				id++;
 			}
 		in.close();
-		}catch(ArrayIndexOutOfBoundsException e)
-		{
-			System.out.println("Causa do erro: " + e.getCause());
-			System.out.println("Registro problematico id = " + tupla.id + " data length: " + data.length);
-			System.out.println(data.toString());
-			System.out.println();
-		}
+		
 		
 		//sorteia que eh teste e quem eh treinamento	
-		int QTD_ELEMENTOS_PARA_TESTE = Math.round((treinamento.size() * Main.TESTE_PORCENTAGEM) / 100);
-		
-		Random random = new Random();   		
+		QTD_ELEMENTOS_PARA_TESTE = Math.round((treinamento.size() * Main.TESTE_PORCENTAGEM) / 100);
+				
 		for(int i = 0 ; i< QTD_ELEMENTOS_PARA_TESTE ; i++)
-		{			     
-            int sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS); 
+		{		
+			while(sorteados.contains(sorteado)) //sortei numeros diferentes dos ja sorteados
+			{
+				sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS); 				
+			} 
+			
+			sorteados.add(sorteado);                 
             tupla = BuscarElemento(sorteado, treinamento);
             teste.add(tupla);
-            treinamento.remove(tupla);                       
+            treinamento.remove(tupla); 
+            sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS);
 		}		
 	}
 	
@@ -143,9 +145,12 @@ public class Classificador
 		for (Diagnostico d : Diagnostico.values())
 		{
 			popularidade = proximos.stream()
-			        .filter(p -> p.teste.RESPOSTA_REAL.equals(d))
-			        .count();			
-			populares.add(new Popular(d, popularidade));	
+					        .filter(p -> p.teste.RESPOSTA_REAL.equals(d))
+					        .count();	
+			if(popularidade != 0)
+			{
+				populares.add(new Popular(d, popularidade));	
+			}
 		}		
 				
 		//ordene a lista pela popularidade
@@ -159,7 +164,7 @@ public class Classificador
 			}
 		});
 		
-		return populares.get(populares.size() - 1).diagnostico;
+		return populares.get(0).diagnostico;
 	}
 }
 

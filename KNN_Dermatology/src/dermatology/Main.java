@@ -23,13 +23,13 @@ public class Main
 		Classificador.teste.removeIf(Objects::isNull);
 		for (Tupla tupla : Classificador.teste)
 		{
-			if(tupla != null) //WORK AROUND
-			{
-				classificador.Classificar(tupla);
-			}
+			//falta algum valor nessa tupla? 
+			// sim = deduza os valores que faltam
+			
+			classificador.Classificar(tupla);
 		}
 	
-		MATRIZ_CONFUSAO.CriarXLS();
+		MATRIZ_CONFUSAO.CriarXLS();		
 	}
 
 }
