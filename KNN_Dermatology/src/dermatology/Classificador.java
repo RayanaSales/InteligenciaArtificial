@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class Classificador
 {
-	private List<DistanciaEuclidiana> distancias = new ArrayList<DistanciaEuclidiana>();
+	private List<Distancia> distancias = new ArrayList<Distancia>();
 	public static List<Tupla> treinamento = new ArrayList<Tupla>();
 	public static List<Tupla> teste = new ArrayList<Tupla>();	
 
@@ -29,16 +29,25 @@ public class Classificador
 		//		guarde o distancia no objeto distância, insira esse obj em uma lista	
 				
 		for (Tupla tupla : treinamento)
-		{			
-			DistanciaEuclidiana distancia = new DistanciaEuclidiana(tupla, teste);			
+		{		
+			Distancia distancia = null;
+			
+			if(Main.TIPO_DISTANCIA == 1)
+			{
+				distancia = new DistanciaEuclidiana(tupla, teste);
+			}
+			else if(Main.TIPO_DISTANCIA == 2)
+			{
+				distancia = new DistanciaManhattan(tupla, teste);
+			}						
 			distancias.add(distancia);
 		}
 		
 		//ordene a lista pela distância
-		Collections.sort(distancias, new Comparator<DistanciaEuclidiana>()
+		Collections.sort(distancias, new Comparator<Distancia>()
 		{
 			@Override
-			public int compare(DistanciaEuclidiana b, DistanciaEuclidiana b1)
+			public int compare(Distancia b, Distancia b1)
 			{
 				// -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
 				return b1.distancia > b.distancia ? -1 : (b1.distancia < b.distancia) ? 1 : 0;
@@ -58,7 +67,7 @@ public class Classificador
 		{
 			if(k < distancias.size())
 			{
-				List<DistanciaEuclidiana> proximos = distancias.subList(0, k);
+				List<Distancia> proximos = distancias.subList(0, k);
 				Diagnostico resultadoClassificacao = AcharMaisComum(proximos);
 				Main.MATRIZ_CONFUSAO.InserirResultado(k, RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
 			}
@@ -137,7 +146,7 @@ public class Classificador
 		return null;
 	}
 	
-	private Diagnostico AcharMaisComum(List<DistanciaEuclidiana> proximos)
+	private Diagnostico AcharMaisComum(List<Distancia> proximos)
 	{
 		long popularidade = 0;		
 		List<Popular> populares = new ArrayList<Popular>();

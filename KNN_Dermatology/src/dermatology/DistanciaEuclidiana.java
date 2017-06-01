@@ -1,18 +1,13 @@
 package dermatology;
 
-public class DistanciaEuclidiana
-{
-	Tupla atual;
-	Tupla teste;
-	double distancia;
-	
+public class DistanciaEuclidiana extends Distancia
+{	
 	public DistanciaEuclidiana(Tupla atual, Tupla teste)
-	{
-		this.atual = atual;
-		this.teste = teste;
-		Calcular();
+	{		
+		super(atual, teste);
 	}
 	
+	@Override
 	public double Calcular()
 	{
 		double erythema = Math.pow(teste.erythema - atual.erythema, 2);
