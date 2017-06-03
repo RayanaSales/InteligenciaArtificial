@@ -84,6 +84,7 @@ public class GerenciadorMatrizConfusao
 				}
 				workbook.write();
 				workbook.close();
+				System.out.println();
 			}
 
 		}

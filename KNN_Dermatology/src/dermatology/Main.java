@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Main
 {
 	//TOTAL = 358
-	public static int TIPO_DISTANCIA = 2; //1 - EUCLIDIANDA 2- MANHATTAN
+	public static int TIPO_DISTANCIA = 2; //1 - EUCLIDIANDA 2- MANHATTAN 3- Minkowski
 	public static GerenciadorMatrizConfusao MATRIZ_CONFUSAO = new GerenciadorMatrizConfusao();
 	
 	public static int QTD_ELEMENTOS_DISPONIVEIS = 344;
@@ -24,9 +24,6 @@ public class Main
 		Classificador.teste.removeIf(Objects::isNull);
 		for (Tupla tupla : Classificador.teste)
 		{
-			//falta algum valor nessa tupla? 
-			// sim = deduza os valores que faltam
-			
 			classificador.Classificar(tupla);
 		}
 	

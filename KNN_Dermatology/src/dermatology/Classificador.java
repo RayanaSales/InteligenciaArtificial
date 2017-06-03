@@ -30,16 +30,21 @@ public class Classificador
 				
 		for (Tupla tupla : treinamento)
 		{		
-			Distancia distancia = null;
+			Distancia distancia = null;			
 			
-			if(Main.TIPO_DISTANCIA == 1)
+			switch (Main.TIPO_DISTANCIA)
 			{
-				distancia = new DistanciaEuclidiana(tupla, teste);
+				case 1:
+					distancia = new DistanciaEuclidiana(tupla, teste);
+				break;
+				case 2:
+					distancia = new DistanciaManhattan(tupla, teste);
+				break;
+				case 3:
+					distancia = new DistanciaMinkowski(tupla, teste);
+				break;
 			}
-			else if(Main.TIPO_DISTANCIA == 2)
-			{
-				distancia = new DistanciaManhattan(tupla, teste);
-			}						
+			
 			distancias.add(distancia);
 		}
 		
@@ -113,8 +118,7 @@ public class Classificador
 				treinamento.add(tupla);
 				id++;
 			}
-		in.close();
-		
+		in.close();		
 		
 		//sorteia que eh teste e quem eh treinamento	
 		QTD_ELEMENTOS_PARA_TESTE = Math.round((treinamento.size() * Main.TESTE_PORCENTAGEM) / 100);
