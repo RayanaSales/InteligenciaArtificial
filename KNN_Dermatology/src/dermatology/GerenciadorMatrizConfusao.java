@@ -43,21 +43,6 @@ public class GerenciadorMatrizConfusao
 
 		return obj;
 	}
-
-	public void ImprimirMatrizes()
-	{
-		for (MatrizConfusao matrizConfusao : matrizes)
-		{
-			for (int i = 0; i < 7; i++)
-			{
-				for (int j = 0; j < 7; j++)
-				{
-					System.out.print(matrizConfusao.matriz[i][j] + "\t\t");
-				}
-				System.out.println();
-			}
-		}
-	}	
 	
 	public void CriarXLS()
 	{ /*
@@ -86,7 +71,6 @@ public class GerenciadorMatrizConfusao
 				workbook.close();
 				System.out.println();
 			}
-
 		}
 		catch (IOException e)
 		{
