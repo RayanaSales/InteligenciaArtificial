@@ -7,12 +7,11 @@ import java.util.List;
 
 public class Evolucao
 {
-	private static List<Geracao> geracoes = new ArrayList<>();
+	static List<Geracao> geracoes = new ArrayList<>();
 	
 	public static void GerarPopulacaoInicial()
-	{
-		Geracao geracao = new Geracao();
-		
+	{		
+		Geracao geracao = new Geracao(0);		
 		for(int i = 0 ; i < Main.TAMANHO_POPULACAO ; i++)
 		{			
 			List<Integer> tabuleiro = Arrays.asList(0,1,2,3,4,5,6,7);
@@ -20,8 +19,7 @@ public class Evolucao
 			
 			Integer[] tabuleiroArray = tabuleiro.toArray(new Integer[tabuleiro.size()]);
 			geracao.individuos.add(new Individuo(tabuleiroArray));
-		}
-		
+		}		
 		geracoes.add(geracao);
 	}
 	
@@ -32,9 +30,8 @@ public class Evolucao
 		 * adiciona em nova populaca
 		 * 		  
 		 * */
-		
 		List<Individuo> novos = GetUltimaGeracao().Crossover();
-		Geracao geracao = new Geracao(novos);
+		Geracao geracao = new Geracao(GetUltimaGeracao().id + 1, novos);
 		geracoes.add(geracao);		
 	}
 	
@@ -47,12 +44,12 @@ public class Evolucao
 	{
 		int solucao_geracao = 0, solucao_individuo = 0;
 		
-		for(int a = 0; a<geracoes.size() ; a++)
-		{
-			System.out.println("GERAÇÃO: " + a);
-			for (int b = 0 ; b < geracoes.get(a).individuos.size() ; b++)
+		for (Geracao geracao : geracoes)
+		{		
+			System.out.println("GERAÇÃO: " + geracao.id);
+			for (int b = 0 ; b < geracao.individuos.size() ; b++)
 			{	
-				Individuo individuoAuxiliar = geracoes.get(a).individuos.get(b);
+				Individuo individuoAuxiliar = geracao.individuos.get(b);
 				System.out.println("INDIVIDUO: " + b);
 				for (int r = 0; r < 8; r++)
 				{
@@ -80,7 +77,7 @@ public class Evolucao
 				
 				if(individuoAuxiliar.ataques == 0)
 				{
-					solucao_geracao = a;
+					solucao_geracao = geracao.id;
 					solucao_individuo = b;
 				}
 				System.out.println("\n");

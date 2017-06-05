@@ -8,30 +8,134 @@ public class Individuo
 	public Individuo(Integer[] tabuleiro) 
 	{
 		this.tabuleiro = tabuleiro;
-		CalcularQuantidadeAtaques();
+		CalcularAptidao();
 	}
 	
-	private int CalcularQuantidadeAtaques()
+	public int CalcularAptidao()
 	{		
-		for(int a = 0 ; a < tabuleiro.length; a++) //rainha 1
+		ataques = 0;
+		for (int i = 0; i <= 7; i++)
 		{
-			int cord_x_rainha1 = tabuleiro[a];
-			int cord_y_rainha1 = a;
-			
-			for(int b = 0; b < tabuleiro.length; b++) //rainha 2
+			ataques += ContarAtaquesPorColuna(i);
+		}
+		
+		return ataques;
+	}
+	
+	private int ContarAtaquesPorColuna(int column)
+	{
+		// a rainha da coluna x, ataca quantas outras rainhas??
+
+		// 1- rainhas nao podem ocupar a msm coluna
+		// 2- rainhas nao podem ocupar a mesma linha
+		// 3- rainhas nao podem estar cruzando diagonais
+
+		int attacks = 0;
+		int cord_i_queen = tabuleiro[column];
+		int cord_j_queen = column;
+
+		// 1- tem alguem na msm linha q eu?
+		attacks += EncontrarAlguemNaMinhaLinha(tabuleiro, cord_i_queen) - 1;
+
+		// 2- tem alguem nas minhas diagonais? (percorro diagonais, se tiver alguem la, ta em ataque)		
+		int x = cord_i_queen;
+		int y = cord_j_queen;
+		
+		int rival_column = column; //coluna da rival que estou testando no momento
+
+		while (x >= 0 && y <= 7) //up, right
+		{
+			rival_column++;
+			x--;
+			y++;
+
+			if (x < 0 || y > 7)
+				break;
+
+			if (AlgumAtaque(rival_column, x, y))
+				attacks++;			
+		}
+
+		x = cord_i_queen;
+		y = cord_j_queen;
+		rival_column = column;
+
+		while (x <= 7 && y <= 7) //down, right
+		{
+			rival_column++;
+			x++;
+			y++;
+
+			if (x > 7 || y > 7)
+				break;
+
+			if (AlgumAtaque(rival_column, x, y))
+				attacks++;
+		}
+
+		x = cord_i_queen;
+		y = cord_j_queen;
+		rival_column = column;
+
+		while (x <= 7 && y >= 0) //down, left
+		{
+			rival_column--;
+			x++;
+			y--;
+
+			if (x > 7 || y < 0)
+				break;
+
+			if (AlgumAtaque(rival_column, x, y))
+				attacks++;
+		}
+
+		x = cord_i_queen;
+		y = cord_j_queen;
+		rival_column = column;
+
+		while (x >= 0 && y >= 0) //down, left
+		{
+			rival_column--;
+			x--;
+			y--;
+
+			if (x < 0 || y < 0)
+				break;
+
+			if (AlgumAtaque(rival_column, x, y))
+				attacks++;
+		}
+
+		return attacks;
+	}
+	
+	protected int EncontrarAlguemNaMinhaLinha(Integer[] tabuleiro2, int element)
+	{
+		int occurrences = 0;
+
+		for (int i : tabuleiro2)
+		{
+			if (i == element)
 			{
-				if(b != a) //nao verifique vc msm
-				{
-					int cord_x_rainha2 = tabuleiro[b];
-					int cord_y_rainha2 = b;
-					
-					if((cord_x_rainha2 - cord_x_rainha1) * -1 == (cord_y_rainha2 - cord_y_rainha1) * -1)
-					{
-						ataques++;
-					}
-				}
+				occurrences++;
 			}
 		}
-		return ataques;
+		return occurrences;
+	}
+
+	private boolean AlgumAtaque(int rival_column, int x, int y)
+	{
+		//x e y representam um dos pontos que formam as diagonais
+		
+		// coordenadas da rival
+		int rival_x = tabuleiro[rival_column];
+		int rival_y = rival_column;
+
+		// se a rival estiver em x, e y ta em ataque
+		if (rival_x == x && rival_y == y)
+			return true;
+		else
+			return false;
 	}
 }

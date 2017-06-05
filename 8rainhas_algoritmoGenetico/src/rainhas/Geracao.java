@@ -8,24 +8,24 @@ import java.util.Random;
 
 public class Geracao
 {
+	int id = 0;
 	public List<Individuo> individuos = new ArrayList<Individuo>();
-	//private List<Individuo> maisAptos = new ArrayList<Individuo>();
 	
-	public Geracao()
+	public Geracao(int id)
 	{
-		
+		this.id = id;
 	}
 	
-	public Geracao(List<Individuo> individuos)
+	public Geracao(int id, List<Individuo> individuos)
 	{
+		this.id = id;
 		this.individuos = individuos;
 	}
 
 	public boolean AvaliarIndividuos()
 	{
 		/*
-		 * Nessa geracao, ha uma solucao? Ainda nao achou solucao = return true
-		 * / else false
+		 * Nessa geracao, ha uma solucao? Ainda nao achou solucao = return true / else false
 		 * 
 		 */
 
@@ -41,19 +41,15 @@ public class Geracao
 	}
 
 	public void SelecionarMaisAptos()
-	{
+	{		
 		Collections.sort(individuos, new Comparator<Individuo>()
 		{
 			@Override
 			public int compare(Individuo b, Individuo b1)
-			{
-				// -1 - less than, 1 - greater than, 0 - equal, all inversed for
-				// descending
+			{				
 				return b1.ataques > b.ataques ? -1 : (b1.ataques < b.ataques) ? 1 : 0;
 			}
 		});
-		
-		//maisAptos.addAll(individuos);
 	}
 
 	public List<Individuo> Crossover()
@@ -80,9 +76,14 @@ public class Geracao
 				individuos.get(i).tabuleiro[5] = individuos.get(i + 1).tabuleiro[7];
 				individuos.get(i + 1).tabuleiro[7] = troca;
 			}
-		}	
+		}
 		
-		AplicarMutacao();
+		//AplicarMutacao();
+		
+		for (Individuo individuo : individuos)
+		{
+			individuo.CalcularAptidao();
+		}
 		return individuos;
 	}
 
