@@ -1,8 +1,6 @@
 package rainhas;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Evolucao
@@ -13,12 +11,8 @@ public class Evolucao
 	{		
 		Geracao geracao = new Geracao(0);		
 		for(int i = 0 ; i < Main.TAMANHO_POPULACAO ; i++)
-		{			
-			List<Integer> tabuleiro = Arrays.asList(0,1,2,3,4,5,6,7);
-			Collections.shuffle(tabuleiro);		
-			
-			Integer[] tabuleiroArray = tabuleiro.toArray(new Integer[tabuleiro.size()]);
-			geracao.individuos.add(new Individuo(tabuleiroArray));
+		{				
+			geracao.individuos[i] = new Individuo(ShuffleString.shuffle("000001010011100101110111"));			
 		}		
 		geracoes.add(geracao);
 	}
@@ -30,8 +24,9 @@ public class Evolucao
 		 * adiciona em nova populaca
 		 * 		  
 		 * */
-		List<Individuo> novos = GetUltimaGeracao().Crossover();
-		Geracao geracao = new Geracao(GetUltimaGeracao().id + 1, novos);
+		
+		Individuo[] filhos = GetUltimaGeracao().Crossover();
+		Geracao geracao = new Geracao(GetUltimaGeracao().id + 1, filhos);
 		geracoes.add(geracao);		
 	}
 	
@@ -44,22 +39,29 @@ public class Evolucao
 	{
 		int solucao_geracao = 0, solucao_individuo = 0;
 		
+		System.out.println();
+		System.out.println();
 		for (Geracao geracao : geracoes)
-		{		
-			System.out.println("GERAÇÃO: " + geracao.id);
-			for (int b = 0 ; b < geracao.individuos.size() ; b++)
+		{	
+			for (int b = 0 ; b < geracao.individuos.length ; b++)
 			{	
-				Individuo individuoAuxiliar = geracao.individuos.get(b);
-				System.out.println("INDIVIDUO: " + b);
+				Individuo individuoAuxiliar = geracao.individuos[b];
+				System.out.println("INDIVIDUO: " + b + " GERAÇÃO: " + geracao.id);
+				
+				System.out.print("Binario: " + individuoAuxiliar.tabuleiroStr);
 				for (int r = 0; r < 8; r++)
 				{
+					if(r == 0)
+					{
+						System.out.print(" => [");
+					}
 					if (r == 7)
 					{
-						System.out.print(individuoAuxiliar.tabuleiro[r] + " => attacks: " + individuoAuxiliar.ataques + "\n");
+						System.out.print(individuoAuxiliar.tabuleiroArray[r] + "] => attacks: " + individuoAuxiliar.ataques + "\n\n");
 					}
 					else
 					{
-						System.out.print(individuoAuxiliar.tabuleiro[r] + ", ");
+						System.out.print(individuoAuxiliar.tabuleiroArray[r] + ", ");
 					}
 				}
 
@@ -67,7 +69,7 @@ public class Evolucao
 				{
 					for (int j = 0; j <= 7; j++) //coluna
 					{
-						if (individuoAuxiliar.tabuleiro[j] == i)
+						if (individuoAuxiliar.tabuleiroArray[j] == i)
 							System.out.print(" r ");
 						else
 							System.out.print(" * ");
@@ -86,4 +88,21 @@ public class Evolucao
 		
 		System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + solucao_geracao + " NO INDIVÍDUO: " + solucao_individuo);
 	}
+}
+
+class ShuffleString
+{
+    public static String shuffle(String s)
+    {
+        String shuffledString = ""; 
+        while (s.length() != 0)
+        {
+            int index = (int) Math.floor(Math.random() * s.length());
+            char c = s.charAt(index);
+            s = s.substring(0,index)+s.substring(index+1);
+            shuffledString += c;
+        }
+        return shuffledString;
+
+    }
 }

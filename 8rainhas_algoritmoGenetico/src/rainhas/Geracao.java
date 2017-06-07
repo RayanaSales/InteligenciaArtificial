@@ -1,22 +1,21 @@
 package rainhas;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 
 public class Geracao
 {
 	int id = 0;
-	public List<Individuo> individuos = new ArrayList<Individuo>();
+	Individuo[] individuos = new Individuo[20]; // pais
+	//Individuo[] maisAptos = new Individuo[20]; // pais mais aptos
 	
 	public Geracao(int id)
 	{
 		this.id = id;
 	}
 	
-	public Geracao(int id, List<Individuo> individuos)
+	public Geracao(int id, Individuo[] individuos)
 	{
 		this.id = id;
 		this.individuos = individuos;
@@ -27,80 +26,76 @@ public class Geracao
 		/*
 		 * Nessa geracao, ha uma solucao? Ainda nao achou solucao = return true / else false
 		 * 
-		 */
-
+		 */	
+		System.out.print("");
 		for (Individuo individuo : individuos)
 		{
-			if (individuo.ataques == 0)
+			if(individuo != null)
 			{
-				return false;
+				individuo.CalcularAptidao();
+				if (individuo.ataques == 0)
+				{
+					return false;
+				}
 			}
-		}
-
+		}		
 		return true;
 	}
 
+	//TROCAR PARA DUELO
 	public void SelecionarMaisAptos()
 	{		
-		Collections.sort(individuos, new Comparator<Individuo>()
-		{
+		Arrays.sort(individuos, new Comparator<Individuo>() {
+		   
 			@Override
-			public int compare(Individuo b, Individuo b1)
-			{				
-				return b1.ataques > b.ataques ? -1 : (b1.ataques < b.ataques) ? 1 : 0;
+			public int compare(Individuo i1, Individuo i2)
+			{
+				// TODO Auto-generated method stub
+				return i1.compareTo(i2);
 			}
 		});
+		
+		//maisAptos = Arrays.copyOfRange(individuos, 0, 20);
 	}
 
-	public List<Individuo> Crossover()
-	{
-		int troca = 0;
+	public Individuo[] Crossover()
+	{		
+		//Individuo[] filhos = new Individuo[20];
+		Random sorteia = new Random();		
 		
-		for(int i = 0 ; i<individuos.size() ; i++)
+		for (int i = 0; i < 20; i++)
 		{
-			if(i != individuos.size() - 1)
+			int posicaoCorte = sorteia.nextInt(22);
+			
+			if (i < individuos.length - 1) //se nao for o ultimo
 			{
-				troca = individuos.get(i).tabuleiro[0];
-				individuos.get(i).tabuleiro[0] = individuos.get(i + 1).tabuleiro[2];
-				individuos.get(i + 1).tabuleiro[2] = troca;
+				//trocar os rabinhos
+				String f1 = individuos[i].tabuleiroStr.substring(0, posicaoCorte) + 
+						individuos[i + 1].tabuleiroStr.substring(posicaoCorte, 24);
 				
-				troca = individuos.get(i).tabuleiro[1];
-				individuos.get(i).tabuleiro[1] = individuos.get(i + 1).tabuleiro[3];
-				individuos.get(i + 1).tabuleiro[3] = troca;
+				String f2 = individuos[i + 1].tabuleiroStr.substring(0, posicaoCorte) + 
+						individuos[i].tabuleiroStr.substring(posicaoCorte, 24);	
 				
-				troca = individuos.get(i).tabuleiro[4];
-				individuos.get(i).tabuleiro[4] = individuos.get(i + 1).tabuleiro[6];
-				individuos.get(i + 1).tabuleiro[6] = troca;
-				
-				troca = individuos.get(i).tabuleiro[5];
-				individuos.get(i).tabuleiro[5] = individuos.get(i + 1).tabuleiro[7];
-				individuos.get(i + 1).tabuleiro[7] = troca;
+				Individuo i1 = new Individuo(f1);
+				Individuo i2 = new Individuo(f2);
+				individuos[individuos.length - 1] = i1;
+				individuos[individuos.length - 1] = i2;
 			}
-		}
-		
-		//AplicarMutacao();
-		
-		for (Individuo individuo : individuos)
-		{
-			individuo.CalcularAptidao();
-		}
+		}		
+		AplicarMutacao();		
 		return individuos;
 	}
 
 	private void AplicarMutacao()
 	{
 		Random sorteia = new Random();		
-		int posicao1 = 0, posicao2 = 0, troca = 0;	
-		int apto = sorteia.nextInt(individuos.size());
+		int filho = sorteia.nextInt(individuos.length);
+		int posicao = sorteia.nextInt(24);			
 				
-		while(posicao1 == posicao2)
-		{
-			posicao1 = sorteia.nextInt(individuos.get(apto).tabuleiro.length);
-			posicao2 = sorteia.nextInt(individuos.get(apto).tabuleiro.length);
-		}		
-				
-		troca = individuos.get(apto).tabuleiro[posicao1];
-		individuos.get(apto).tabuleiro[posicao1] = individuos.get(apto).tabuleiro[posicao2];
-		individuos.get(apto).tabuleiro[posicao2] = troca;		
-	}
+		char[] tabuleiroCharArray = individuos[filho].tabuleiroStr.toCharArray();
+	    tabuleiroCharArray[posicao] = (tabuleiroCharArray[posicao] == '0' ? '1' : '0');
+	    String nova = new String(tabuleiroCharArray);
+	    
+	    individuos[filho].tabuleiroStr = nova;		
+	}	
 }

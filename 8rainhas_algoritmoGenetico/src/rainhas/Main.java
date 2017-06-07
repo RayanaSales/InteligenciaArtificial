@@ -5,17 +5,17 @@ public class Main
 	public static int TAMANHO_POPULACAO = 20;
 	
 	public static void main(String[] args)
-	{		
-		System.out.println("Criando geração: " + Evolucao.geracoes.size());
+	{	
 		Evolucao.GerarPopulacaoInicial();
+		System.out.println("Geração " + Evolucao.GetUltimaGeracao().id + " criada");
 		
 		while(Evolucao.GetUltimaGeracao().AvaliarIndividuos())
 		{
 			Evolucao.GetUltimaGeracao().SelecionarMaisAptos();
 			Evolucao.CriarNovaGeracao();
-			System.out.println("Criando geração: " + Evolucao.geracoes.size());
+			System.out.println("Geração " + Evolucao.GetUltimaGeracao().id + " criada");
 		}
 		
-		Evolucao.ImprimirGeracoes();
+		//Evolucao.ImprimirGeracoes();
 	}
 }

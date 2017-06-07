@@ -2,17 +2,42 @@ package rainhas;
 
 public class Individuo
 {
-	public Integer[] tabuleiro = new Integer[] {0, 1, 2, 3, 4, 5, 6, 7}; //valores de 0 a 7
 	public int ataques = 0;
+	public String tabuleiroStr;	
+	public Integer[] tabuleiroArray = new Integer[8]; //facilitador das contas	
 	
-	public Individuo(Integer[] tabuleiro) 
+	public Individuo(String tabuleiro) 
 	{
-		this.tabuleiro = tabuleiro;
+		this.tabuleiroStr = tabuleiro;	
 		CalcularAptidao();
 	}
 	
+	public int compareTo(Individuo i) 
+	{
+	    // return this.id - otherStudent.id ; //result of this operation can overflow
+		return i.ataques > this.ataques ? -1 : (i.ataques < this.ataques) ? 1 : 0;
+	} 
+	
+	private void Decodificar()
+	{
+		int inicio = 0;
+		int fim = 3;
+		
+		for(int i = 0 ; i<= 7 ; i++)
+		{
+			String subsStr = tabuleiroStr.substring(inicio, fim);
+			tabuleiroArray[i] = Integer.parseInt(subsStr, 2);
+			inicio = fim;
+			fim = inicio + 3;
+		}	
+		inicio = 0;
+		fim = 3;
+	}
+	
 	public int CalcularAptidao()
-	{		
+	{	
+		Decodificar(); //atualize array
+		
 		ataques = 0;
 		for (int i = 0; i <= 7; i++)
 		{
@@ -31,11 +56,11 @@ public class Individuo
 		// 3- rainhas nao podem estar cruzando diagonais
 
 		int attacks = 0;
-		int cord_i_queen = tabuleiro[column];
+		int cord_i_queen = tabuleiroArray[column];
 		int cord_j_queen = column;
 
 		// 1- tem alguem na msm linha q eu?
-		attacks += EncontrarAlguemNaMinhaLinha(tabuleiro, cord_i_queen) - 1;
+		attacks += EncontrarAlguemNaMinhaLinha(tabuleiroArray, cord_i_queen) - 1;
 
 		// 2- tem alguem nas minhas diagonais? (percorro diagonais, se tiver alguem la, ta em ataque)		
 		int x = cord_i_queen;
@@ -129,7 +154,7 @@ public class Individuo
 		//x e y representam um dos pontos que formam as diagonais
 		
 		// coordenadas da rival
-		int rival_x = tabuleiro[rival_column];
+		int rival_x = tabuleiroArray[rival_column];
 		int rival_y = rival_column;
 
 		// se a rival estiver em x, e y ta em ataque
