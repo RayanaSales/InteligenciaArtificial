@@ -2,7 +2,8 @@ package rainhas;
 
 public class Main
 {
-	public static int TAMANHO_POPULACAO = 20;
+	public static int TAMANHO_POPULACAO = 500;
+	public static double TAXA_MUTACA0 = 0.001;
 	
 	public static void main(String[] args)
 	{	
@@ -17,5 +18,6 @@ public class Main
 		}
 		
 		//Evolucao.ImprimirGeracoes();
+		Evolucao.ImprimirUltimaGeracao();
 	}
 }

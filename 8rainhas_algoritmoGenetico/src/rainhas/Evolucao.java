@@ -84,6 +84,52 @@ public class Evolucao
 				}
 				System.out.println("\n");
 			}
+		}		
+		System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + solucao_geracao + " NO INDIVÍDUO: " + solucao_individuo);
+	}
+	
+	public static void ImprimirUltimaGeracao()
+	{
+		int solucao_geracao = 0, solucao_individuo = 0;
+		Geracao aux = GetUltimaGeracao();
+		
+		for (int b = 0 ; b < aux.individuos.length ; b++)
+		{	
+			Individuo individuoAuxiliar = aux.individuos[b];
+			System.out.println("INDIVIDUO: " + b + " GERAÇÃO: " + aux.id);
+			
+			System.out.print("Binario: " + individuoAuxiliar.tabuleiroStr);
+			for (int r = 0; r < 8; r++)
+			{
+				if(r == 0)
+				{
+					System.out.print(" => [");
+				}
+				if (r == 7)
+				{
+					System.out.print(individuoAuxiliar.tabuleiroArray[r] + "] => attacks: " + individuoAuxiliar.ataques + "\n\n");
+				}
+				else
+				{
+					System.out.print(individuoAuxiliar.tabuleiroArray[r] + ", ");
+				}
+			}
+			for (int i = 0 ; i <= 7; i++) //linha
+			{
+				for (int j = 0; j <= 7; j++) //coluna
+				{
+					if (individuoAuxiliar.tabuleiroArray[j] == i)
+						System.out.print(" r ");
+					else
+						System.out.print(" * ");
+				}
+				System.out.println();
+			}
+			if(individuoAuxiliar.ataques == 0)
+			{
+				solucao_geracao = aux.id;
+				solucao_individuo = b;
+			}	
 		}
 		
 		System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + solucao_geracao + " NO INDIVÍDUO: " + solucao_individuo);

@@ -1,14 +1,12 @@
 package rainhas;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Random;
 
 public class Geracao
 {
 	int id = 0;
-	Individuo[] individuos = new Individuo[20]; // pais
-	//Individuo[] maisAptos = new Individuo[20]; // pais mais aptos
+	Individuo[] individuos = new Individuo[Main.TAMANHO_POPULACAO]; // pais
+	private Individuo[] maisAptos = new Individuo[Main.TAMANHO_POPULACAO]; // pais mais aptos
 	
 	public Geracao(int id)
 	{
@@ -41,61 +39,72 @@ public class Geracao
 		}		
 		return true;
 	}
-
-	//TROCAR PARA DUELO
+	
 	public void SelecionarMaisAptos()
 	{		
-		Arrays.sort(individuos, new Comparator<Individuo>() {
-		   
-			@Override
-			public int compare(Individuo i1, Individuo i2)
-			{
-				// TODO Auto-generated method stub
-				return i1.compareTo(i2);
-			}
-		});
+		Random sorteia = new Random();	
 		
-		//maisAptos = Arrays.copyOfRange(individuos, 0, 20);
+		for(int a = 0 ; a < Main.TAMANHO_POPULACAO ; a++)
+		{
+			int i = sorteia.nextInt(Main.TAMANHO_POPULACAO);
+			int j = sorteia.nextInt(Main.TAMANHO_POPULACAO);				
+			while (i == j){
+				j = sorteia.nextInt(Main.TAMANHO_POPULACAO);	
+			}
+			maisAptos[a] = (individuos[i].ataques < individuos[j].ataques ? individuos[i] : individuos[j]);
+		}
 	}
 
 	public Individuo[] Crossover()
 	{		
-		//Individuo[] filhos = new Individuo[20];
 		Random sorteia = new Random();		
 		
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < Main.TAMANHO_POPULACAO; i++)
 		{
 			int posicaoCorte = sorteia.nextInt(22);
 			
-			if (i < individuos.length - 1) //se nao for o ultimo
+			if (i < maisAptos.length - 1) //se nao for o ultimo
 			{
 				//trocar os rabinhos
-				String f1 = individuos[i].tabuleiroStr.substring(0, posicaoCorte) + 
-						individuos[i + 1].tabuleiroStr.substring(posicaoCorte, 24);
+				String f1 = maisAptos[i].tabuleiroStr.substring(0, posicaoCorte) + 
+						maisAptos[i + 1].tabuleiroStr.substring(posicaoCorte, 24);
 				
-				String f2 = individuos[i + 1].tabuleiroStr.substring(0, posicaoCorte) + 
-						individuos[i].tabuleiroStr.substring(posicaoCorte, 24);	
+				String f2 = maisAptos[i + 1].tabuleiroStr.substring(0, posicaoCorte) + 
+						maisAptos[i].tabuleiroStr.substring(posicaoCorte, 24);	
 				
 				Individuo i1 = new Individuo(f1);
 				Individuo i2 = new Individuo(f2);
-				individuos[individuos.length - 1] = i1;
-				individuos[individuos.length - 1] = i2;
+				maisAptos[maisAptos.length - 1] = i1;
+				maisAptos[maisAptos.length - 1] = i2;
 			}
-		}		
-		AplicarMutacao();		
-		return individuos;
+		}			
+		if(AplicarMutacao())
+		{
+			GerarMutante();
+		}
+		return maisAptos;
 	}
-
-	private void AplicarMutacao()
+	
+	private boolean AplicarMutacao()
+	{
+		double randon = new Random().nextDouble() * 1;		
+		
+		if(randon < Main.TAXA_MUTACA0)
+			return true;
+		
+		return false;
+	}	
+	
+	private void GerarMutante()
 	{
 		Random sorteia = new Random();		
-		int filho = sorteia.nextInt(individuos.length);
+		int filho = sorteia.nextInt(maisAptos.length);
 		int posicao = sorteia.nextInt(24);			
 				
-		char[] tabuleiroCharArray = individuos[filho].tabuleiroStr.toCharArray();
+		char[] tabuleiroCharArray = maisAptos[filho].tabuleiroStr.toCharArray();
 	    tabuleiroCharArray[posicao] = (tabuleiroCharArray[posicao] == '0' ? '1' : '0');
 	    String nova = new String(tabuleiroCharArray);
 	    
-	    individuos[filho].tabuleiroStr = nova;		
+	    maisAptos[filho].tabuleiroStr = nova;	
 	}	
 }

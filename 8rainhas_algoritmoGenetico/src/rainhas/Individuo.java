@@ -14,7 +14,6 @@ public class Individuo
 	
 	public int compareTo(Individuo i) 
 	{
-	    // return this.id - otherStudent.id ; //result of this operation can overflow
 		return i.ataques > this.ataques ? -1 : (i.ataques < this.ataques) ? 1 : 0;
 	} 
 	
@@ -23,7 +22,7 @@ public class Individuo
 		int inicio = 0;
 		int fim = 3;
 		
-		for(int i = 0 ; i<= 7 ; i++)
+		for(int i = 0 ; i< tabuleiroArray.length ; i++)
 		{
 			String subsStr = tabuleiroStr.substring(inicio, fim);
 			tabuleiroArray[i] = Integer.parseInt(subsStr, 2);
@@ -39,7 +38,7 @@ public class Individuo
 		Decodificar(); //atualize array
 		
 		ataques = 0;
-		for (int i = 0; i <= 7; i++)
+		for (int i = 0; i < tabuleiroArray.length; i++)
 		{
 			ataques += ContarAtaquesPorColuna(i);
 		}
