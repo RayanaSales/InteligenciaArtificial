@@ -148,6 +148,37 @@ public class Evolucao
 		
 		System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + solucao_geracao + " NO INDIVÍDUO: " + solucao_individuo);
 	}
+
+	public static void ImprimirSolucao(Individuo individuo)
+	{
+		System.out.print("\n\nBinario: " + individuo.tabuleiroStr);
+		for (int r = 0; r < 8; r++)
+		{
+			if(r == 0)
+			{
+				System.out.print(" => [");
+			}
+			if (r == 7)
+			{
+				System.out.print(individuo.tabuleiroArray[r] + "] => attacks: " + individuo.ataques + "\n\n");
+			}
+			else
+			{
+				System.out.print(individuo.tabuleiroArray[r] + ", ");
+			}
+		}
+		for (int i = 0 ; i <= 7; i++) //linha
+		{
+			for (int j = 0; j <= 7; j++) //coluna
+			{
+				if (individuo.tabuleiroArray[j] == i)
+					System.out.print(" r ");
+				else
+					System.out.print(" * ");
+			}	
+			System.out.println();
+		}
+	}
 }
 
 class ShuffleString

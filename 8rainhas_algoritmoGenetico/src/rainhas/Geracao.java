@@ -1,5 +1,6 @@
 package rainhas;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Geracao
@@ -33,6 +34,8 @@ public class Geracao
 				individuo.CalcularAptidao();
 				if (individuo.ataques == 0)
 				{
+					Main.INDIVIDUO_SOLUCAO = individuo;
+					System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + id + " NO INDIVÍDUO: " + Arrays.asList(individuos).indexOf(individuo));
 					return false;
 				}
 			}

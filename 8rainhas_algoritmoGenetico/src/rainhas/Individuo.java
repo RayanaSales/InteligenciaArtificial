@@ -2,6 +2,7 @@ package rainhas;
 
 public class Individuo
 {
+	public int id = 0;
 	public int ataques = 0;
 	public String tabuleiroStr;	
 	public Integer[] tabuleiroArray = new Integer[8]; //facilitador das contas	
