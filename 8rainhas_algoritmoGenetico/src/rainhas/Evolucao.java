@@ -12,7 +12,21 @@ public class Evolucao
 		Geracao geracao = new Geracao(0);		
 		for(int i = 0 ; i < Main.TAMANHO_POPULACAO ; i++)
 		{				
-			geracao.individuos[i] = new Individuo(ShuffleString.shuffle("000001010011100101110111"));			
+			String tabuleiroBase10 = ShuffleString.shuffle("01234567");
+			String tabuleiroBase2 = "";
+			
+			for (int j = 0; j < tabuleiroBase10.length(); j++)
+			{
+				int valorBase10 = Character.getNumericValue(tabuleiroBase10.charAt(j));
+				String valorBase2 = Integer.toBinaryString(valorBase10);				
+				while(valorBase2.length() != 3)
+				{
+					valorBase2 = "0" + valorBase2;
+				}				
+				tabuleiroBase2 += valorBase2;
+			}
+			
+			geracao.individuos[i] = new Individuo(tabuleiroBase2);			
 		}		
 		geracoes.add(geracao);
 	}
