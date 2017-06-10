@@ -1,7 +1,6 @@
 package dermatology;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class Main
 {
@@ -19,9 +18,7 @@ public class Main
 		System.out.println("Preparando ambiente...");
 		classificador.PrepararAmbiente();
 		
-		System.out.println("Classificando...");
-		
-		Classificador.teste.removeIf(Objects::isNull);
+		System.out.println("Classificando...");		
 		for (Tupla tupla : Classificador.teste)
 		{
 			classificador.Classificar(tupla);

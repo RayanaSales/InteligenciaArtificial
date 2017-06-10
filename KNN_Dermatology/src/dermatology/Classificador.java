@@ -70,16 +70,9 @@ public class Classificador
 						
 		for (int k= 1; k <= 11 ; k = k + 2)
 		{
-			if(k < distancias.size())
-			{
-				List<Distancia> proximos = distancias.subList(0, k);
-				Diagnostico resultadoClassificacao = AcharMaisComum(proximos);
-				Main.MATRIZ_CONFUSAO.InserirResultado(k, RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
-			}
-			else
-			{
-				break;
-			}
+			List<Distancia> proximos = distancias.subList(0, k);
+			Diagnostico resultadoClassificacao = AcharMaisComum(proximos);
+			Main.MATRIZ_CONFUSAO.InserirResultado(k, RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
 		}
 	}
 		
@@ -94,9 +87,9 @@ public class Classificador
 		 */
 		Random random = new Random();
 		
-		int QTD_ELEMENTOS_PARA_TESTE = Math.round((treinamento.size() * Main.TESTE_PORCENTAGEM) / 100);		 
+		int QTD_ELEMENTOS_PARA_TESTE = 0;		 
 		int sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS);		
-		List<Integer> sorteados = new ArrayList<>();
+		List<Integer> sorteados = new ArrayList<>(); //valores ja sorteados (para popular a lista de teste)
 				
 		BufferedReader in = new BufferedReader(new FileReader("dermatology.data"));		
 		String line;
@@ -135,7 +128,8 @@ public class Classificador
             teste.add(tupla);
             treinamento.remove(tupla); 
             sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS);
-		}		
+		}	
+		System.out.println();
 	}
 	
 	private Tupla BuscarElemento(int id, List<Tupla> dataset)
