@@ -6,6 +6,7 @@ import java.util.Random;
 public class Geracao
 {
 	int id = 0;
+	int ID_SEQUENCE_INVIVIDUOS = -1;
 	Individuo[] individuos = new Individuo[Main.TAMANHO_POPULACAO]; // pais
 	private Individuo[] maisAptos = new Individuo[Main.TAMANHO_POPULACAO]; // pais mais aptos
 	
@@ -34,8 +35,7 @@ public class Geracao
 				individuo.CalcularAptidao();
 				if (individuo.ataques == 0)
 				{
-					Main.INDIVIDUO_SOLUCAO = individuo;
-					System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + id + " NO INDIVÍDUO: " + Arrays.asList(individuos).indexOf(individuo));
+					System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + id + " NO INDIVÍDUO: " + Arrays.asList(individuos).indexOf(individuo));					
 					return false;
 				}
 			}
@@ -75,8 +75,8 @@ public class Geracao
 				String f2 = maisAptos[i + 1].tabuleiroStr.substring(0, posicaoCorte) + 
 						maisAptos[i].tabuleiroStr.substring(posicaoCorte, 24);	
 				
-				Individuo i1 = new Individuo(f1);
-				Individuo i2 = new Individuo(f2);
+				Individuo i1 = new Individuo(f1, ++ID_SEQUENCE_INVIVIDUOS);
+				Individuo i2 = new Individuo(f2, ++ID_SEQUENCE_INVIVIDUOS);
 				maisAptos[maisAptos.length - 1] = i1;
 				maisAptos[maisAptos.length - 1] = i2;
 			}

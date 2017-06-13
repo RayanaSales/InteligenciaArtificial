@@ -26,7 +26,7 @@ public class Evolucao
 				tabuleiroBase2 += valorBase2;
 			}
 			
-			geracao.individuos[i] = new Individuo(tabuleiroBase2);			
+			geracao.individuos[i] = new Individuo(tabuleiroBase2, i);			
 		}		
 		geracoes.add(geracao);
 	}
@@ -49,109 +49,22 @@ public class Evolucao
 		return geracoes.get(geracoes.size() - 1);
 	}
 	
-	public static void ImprimirGeracoes()
-	{
-		int solucao_geracao = 0, solucao_individuo = 0;
-		
-		System.out.println();
-		System.out.println();
-		for (Geracao geracao : geracoes)
-		{	
-			for (int b = 0 ; b < geracao.individuos.length ; b++)
-			{	
-				Individuo individuoAuxiliar = geracao.individuos[b];
-				System.out.println("INDIVIDUO: " + b + " GERA«√O: " + geracao.id);
-				
-				System.out.print("Binario: " + individuoAuxiliar.tabuleiroStr);
-				for (int r = 0; r < 8; r++)
-				{
-					if(r == 0)
-					{
-						System.out.print(" => [");
-					}
-					if (r == 7)
-					{
-						System.out.print(individuoAuxiliar.tabuleiroArray[r] + "] => attacks: " + individuoAuxiliar.ataques + "\n\n");
-					}
-					else
-					{
-						System.out.print(individuoAuxiliar.tabuleiroArray[r] + ", ");
-					}
-				}
-
-				for (int i = 0 ; i <= 7; i++) //linha
-				{
-					for (int j = 0; j <= 7; j++) //coluna
-					{
-						if (individuoAuxiliar.tabuleiroArray[j] == i)
-							System.out.print(" r ");
-						else
-							System.out.print(" * ");
-					}
-					System.out.println();
-				}
-				
-				if(individuoAuxiliar.ataques == 0)
-				{
-					solucao_geracao = geracao.id;
-					solucao_individuo = b;
-				}
-				System.out.println("\n");
-			}
-		}		
-		System.out.println("SOLU«√O ENCONTRADA NA GERA«√O: " + solucao_geracao + " NO INDIVÕDUO: " + solucao_individuo);
-	}
-	
 	public static void ImprimirUltimaGeracao()
 	{
-		int solucao_geracao = 0, solucao_individuo = 0;
-		Geracao aux = GetUltimaGeracao();
-		
-		for (int b = 0 ; b < aux.individuos.length ; b++)
-		{	
-			Individuo individuoAuxiliar = aux.individuos[b];
-			System.out.println("INDIVIDUO: " + b + " GERA«√O: " + aux.id);
-			
-			System.out.print("Binario: " + individuoAuxiliar.tabuleiroStr);
-			for (int r = 0; r < 8; r++)
-			{
-				if(r == 0)
-				{
-					System.out.print(" => [");
-				}
-				if (r == 7)
-				{
-					System.out.print(individuoAuxiliar.tabuleiroArray[r] + "] => attacks: " + individuoAuxiliar.ataques + "\n\n");
-				}
-				else
-				{
-					System.out.print(individuoAuxiliar.tabuleiroArray[r] + ", ");
-				}
-			}
-			for (int i = 0 ; i <= 7; i++) //linha
-			{
-				for (int j = 0; j <= 7; j++) //coluna
-				{
-					if (individuoAuxiliar.tabuleiroArray[j] == i)
-						System.out.print(" r ");
-					else
-						System.out.print(" * ");
-				}
-				System.out.println();
-			}
-			if(individuoAuxiliar.ataques == 0)
-			{
-				solucao_geracao = aux.id;
-				solucao_individuo = b;
-			}	
+		for (Individuo individuo : geracoes.get(geracoes.size() - 1).individuos)
+		{			
+			boolean solucao = individuo.ataques == 0;
+			ImprimirIndividuo(individuo, solucao);
 		}
-		
-		System.out.println("SOLU«√O ENCONTRADA NA GERA«√O: " + solucao_geracao + " NO INDIVÕDUO: " + solucao_individuo);
 	}
 
-	public static void ImprimirSolucao(Individuo individuo)
+	public static void ImprimirIndividuo(Individuo individuo, boolean solucao)
 	{
-		System.out.print("\n\nBinario: " + individuo.tabuleiroStr);
+		String solucaoStr = ""; 
+		if(solucao){
+			solucaoStr = " -> SOLU«√√√√√√√√√√√√√√√√√√√√O";
+		}
+		System.out.print("Id: " + individuo.id + " Binario: " + individuo.tabuleiroStr);
 		for (int r = 0; r < 8; r++)
 		{
 			if(r == 0)
@@ -160,23 +73,12 @@ public class Evolucao
 			}
 			if (r == 7)
 			{
-				System.out.print(individuo.tabuleiroArray[r] + "] => attacks: " + individuo.ataques + "\n\n");
+				System.out.println(individuo.tabuleiroArray[r] + "] => attacks: " + individuo.ataques + solucaoStr);
 			}
 			else
 			{
 				System.out.print(individuo.tabuleiroArray[r] + ", ");
 			}
-		}
-		for (int i = 0 ; i <= 7; i++) //linha
-		{
-			for (int j = 0; j <= 7; j++) //coluna
-			{
-				if (individuo.tabuleiroArray[j] == i)
-					System.out.print(" r ");
-				else
-					System.out.print(" * ");
-			}	
-			System.out.println();
 		}
 	}
 }

@@ -4,9 +4,7 @@ public class Main
 {
 	public static int TAMANHO_POPULACAO = 500;
 	public static double TAXA_MUTACA0 = 0.001;
-	
-	public static Individuo INDIVIDUO_SOLUCAO;
-	
+		
 	public static void main(String[] args)
 	{	
 		Evolucao.GerarPopulacaoInicial();
@@ -18,9 +16,6 @@ public class Main
 			Evolucao.CriarNovaGeracao();
 			System.out.println("Geração " + Evolucao.GetUltimaGeracao().id + " criada");
 		}
-		
-		//Evolucao.ImprimirGeracoes();
-		//Evolucao.ImprimirUltimaGeracao();
-		Evolucao.ImprimirSolucao(INDIVIDUO_SOLUCAO);
+		Evolucao.ImprimirUltimaGeracao();		
 	}
 }

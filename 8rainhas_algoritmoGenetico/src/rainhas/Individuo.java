@@ -7,8 +7,9 @@ public class Individuo
 	public String tabuleiroStr;	
 	public Integer[] tabuleiroArray = new Integer[8]; //facilitador das contas	
 	
-	public Individuo(String tabuleiro) 
+	public Individuo(String tabuleiro, int id) 
 	{
+		this.id = id;
 		this.tabuleiroStr = tabuleiro;	
 		CalcularAptidao();
 	}
