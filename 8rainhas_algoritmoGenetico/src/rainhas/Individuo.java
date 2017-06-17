@@ -30,9 +30,7 @@ public class Individuo
 			tabuleiroArray[i] = Integer.parseInt(subsStr, 2);
 			inicio = fim;
 			fim = inicio + 3;
-		}	
-		inicio = 0;
-		fim = 3;
+		}			
 	}
 	
 	public int CalcularAptidao()

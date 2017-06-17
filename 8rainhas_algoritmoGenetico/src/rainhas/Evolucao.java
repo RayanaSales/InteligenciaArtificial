@@ -1,12 +1,13 @@
 package rainhas;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Evolucao
 {
 	static List<Geracao> geracoes = new ArrayList<>();
-	
+		
 	public static void GerarPopulacaoInicial()
 	{		
 		Geracao geracao = new Geracao(0);		
@@ -51,11 +52,20 @@ public class Evolucao
 	
 	public static void ImprimirUltimaGeracao()
 	{
+		int individuo_solucao_id = 0, geracao_solucao_id = GetUltimaGeracao().id;
+		
 		for (Individuo individuo : geracoes.get(geracoes.size() - 1).individuos)
 		{			
 			boolean solucao = individuo.ataques == 0;
 			ImprimirIndividuo(individuo, solucao);
+			
+			if(solucao)
+			{
+				individuo_solucao_id = individuo.id;
+			}
 		}
+		
+		System.out.println("\nSOLUÇÃO ENCONTRADA NA GERAÇÃO: " + geracao_solucao_id + " NO INDIVÍDUO: " + individuo_solucao_id);
 	}
 
 	public static void ImprimirIndividuo(Individuo individuo, boolean solucao)

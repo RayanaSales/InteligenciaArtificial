@@ -27,18 +27,13 @@ public class Geracao
 		 * Nessa geracao, ha uma solucao? Ainda nao achou solucao = return true / else false
 		 * 
 		 */	
-		System.out.print("");
 		for (Individuo individuo : individuos)
 		{
-			if(individuo != null)
-			{
-				individuo.CalcularAptidao();
-				if (individuo.ataques == 0)
-				{
-					System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + id + " NO INDIVÍDUO: " + Arrays.asList(individuos).indexOf(individuo));					
-					return false;
-				}
-			}
+			individuo.CalcularAptidao();
+			if (individuo.ataques == 0)
+			{								
+				return false;
+			}			
 		}		
 		return true;
 	}
@@ -60,7 +55,8 @@ public class Geracao
 
 	public Individuo[] Crossover()
 	{		
-		Random sorteia = new Random();		
+		Random sorteia = new Random();	
+		Individuo[] filhos = new Individuo[Main.TAMANHO_POPULACAO];
 		
 		for (int i = 0; i < Main.TAMANHO_POPULACAO; i++)
 		{
@@ -77,15 +73,15 @@ public class Geracao
 				
 				Individuo i1 = new Individuo(f1, ++ID_SEQUENCE_INVIVIDUOS);
 				Individuo i2 = new Individuo(f2, ++ID_SEQUENCE_INVIVIDUOS);
-				maisAptos[maisAptos.length - 1] = i1;
-				maisAptos[maisAptos.length - 1] = i2;
+				filhos[i] = i1;
+				filhos[i + 1] = i2;
 			}
 		}			
 		if(AplicarMutacao())
 		{
-			GerarMutante();
+			filhos = GerarMutante(filhos);
 		}
-		return maisAptos;
+		return filhos;
 	}
 	
 	private boolean AplicarMutacao()
@@ -98,16 +94,17 @@ public class Geracao
 		return false;
 	}	
 	
-	private void GerarMutante()
+	private Individuo[] GerarMutante(Individuo[] filhos)
 	{
 		Random sorteia = new Random();		
-		int filho = sorteia.nextInt(maisAptos.length);
+		int filho = sorteia.nextInt(filhos.length);
 		int posicao = sorteia.nextInt(24);			
 				
-		char[] tabuleiroCharArray = maisAptos[filho].tabuleiroStr.toCharArray();
+		char[] tabuleiroCharArray = filhos[filho].tabuleiroStr.toCharArray();
 	    tabuleiroCharArray[posicao] = (tabuleiroCharArray[posicao] == '0' ? '1' : '0');
 	    String nova = new String(tabuleiroCharArray);
 	    
-	    maisAptos[filho].tabuleiroStr = nova;	
+	    filhos[filho].tabuleiroStr = nova;	
+	    return filhos;
 	}	
 }
