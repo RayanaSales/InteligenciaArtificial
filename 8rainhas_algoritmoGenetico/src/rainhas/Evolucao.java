@@ -1,7 +1,6 @@
 package rainhas;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Evolucao
@@ -27,7 +26,7 @@ public class Evolucao
 				tabuleiroBase2 += valorBase2;
 			}
 			
-			geracao.individuos[i] = new Individuo(tabuleiroBase2, i);			
+			geracao.individuos[i] = new Individuo(tabuleiroBase2);			
 		}		
 		geracoes.add(geracao);
 	}
@@ -39,6 +38,11 @@ public class Evolucao
 		 * adiciona em nova populaca
 		 * 		  
 		 * */
+		
+		if(GetUltimaGeracao().id > 5000)
+		{
+			System.out.println("WAT????? id = " + GetUltimaGeracao().id);
+		}
 		
 		Individuo[] filhos = GetUltimaGeracao().Crossover();
 		Geracao geracao = new Geracao(GetUltimaGeracao().id + 1, filhos);
@@ -52,29 +56,31 @@ public class Evolucao
 	
 	public static void ImprimirUltimaGeracao()
 	{
-		int individuo_solucao_id = 0, geracao_solucao_id = GetUltimaGeracao().id;
+		int individuo_solucao_id = 0, geracao_solucao_id = GetUltimaGeracao().id, indexHelp = 0;
 		
 		for (Individuo individuo : geracoes.get(geracoes.size() - 1).individuos)
 		{			
 			boolean solucao = individuo.ataques == 0;
-			ImprimirIndividuo(individuo, solucao);
+			ImprimirIndividuo(individuo, indexHelp, solucao);
 			
 			if(solucao)
-			{
-				individuo_solucao_id = individuo.id;
+			{				
+				individuo_solucao_id = indexHelp;
+				
 			}
+			indexHelp++;
 		}
 		
 		System.out.println("\nSOLU«√O ENCONTRADA NA GERA«√O: " + geracao_solucao_id + " NO INDIVÕDUO: " + individuo_solucao_id);
 	}
 
-	public static void ImprimirIndividuo(Individuo individuo, boolean solucao)
+	public static void ImprimirIndividuo(Individuo individuo, int id, boolean solucao)
 	{
 		String solucaoStr = ""; 
 		if(solucao){
 			solucaoStr = " -> SOLU«√√√√√√√√√√√√√√√√√√√√O";
 		}
-		System.out.print("Id: " + individuo.id + " Binario: " + individuo.tabuleiroStr);
+		System.out.print("Id: " + id + " Binario: " + individuo.tabuleiroStr);
 		for (int r = 0; r < 8; r++)
 		{
 			if(r == 0)

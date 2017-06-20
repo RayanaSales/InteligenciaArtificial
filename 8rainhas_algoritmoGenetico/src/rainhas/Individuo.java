@@ -2,18 +2,16 @@ package rainhas;
 
 public class Individuo
 {
-	public int id = 0;
 	public int ataques = 0;
 	public String tabuleiroStr;	
 	public Integer[] tabuleiroArray = new Integer[8]; //facilitador das contas	
 	
-	public Individuo(String tabuleiro, int id) 
+	public Individuo(String tabuleiro) 
 	{
-		this.id = id;
 		this.tabuleiroStr = tabuleiro;	
 		CalcularAptidao();
 	}
-	
+		
 	public int compareTo(Individuo i) 
 	{
 		return i.ataques > this.ataques ? -1 : (i.ataques < this.ataques) ? 1 : 0;
@@ -21,6 +19,9 @@ public class Individuo
 	
 	private void Decodificar()
 	{
+		/*
+		 * Converte tabuleiroStr (binario) para o array de inteiros */
+		
 		int inicio = 0;
 		int fim = 3;
 		
@@ -31,6 +32,23 @@ public class Individuo
 			inicio = fim;
 			fim = inicio + 3;
 		}			
+	}
+	
+	public void Codificar()
+	{
+		/*
+		 * Converte o array de inteiros, para tabuleiroStr (binario) */
+		tabuleiroStr = "";
+		for (Integer valor : tabuleiroArray)
+		{
+			String valorBase2 = Integer.toBinaryString(valor);				
+			while(valorBase2.length() != 3)
+			{
+				valorBase2 = "0" + valorBase2;
+			}				
+			tabuleiroStr += valorBase2;
+		}
+		System.out.println();
 	}
 	
 	public int CalcularAptidao()
