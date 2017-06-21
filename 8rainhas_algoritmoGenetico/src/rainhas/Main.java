@@ -3,7 +3,7 @@ package rainhas;
 public class Main
 {
 	public static int TAMANHO_POPULACAO = 500;
-	public static double TAXA_MUTACA0 = 0.003;
+	public static double TAXA_MUTACA0 = 0.002;
 		
 	public static void main(String[] args)
 	{	
@@ -21,8 +21,8 @@ public class Main
 		
 		while(Evolucao.GetUltimaGeracao().AvaliarIndividuos())
 		{
-			Evolucao.GetUltimaGeracao().SelecionarMaisAptos();
-			Evolucao.CriarNovaGeracao();
+			Individuo[] sobreviventes = Evolucao.GetUltimaGeracao().SelecaoNatural();
+			Evolucao.CriarNovaGeracao(sobreviventes);
 			//System.out.println("Geração " + Evolucao.GetUltimaGeracao().id + " criada");
 		}
 		//Evolucao.ImprimirUltimaGeracao();	

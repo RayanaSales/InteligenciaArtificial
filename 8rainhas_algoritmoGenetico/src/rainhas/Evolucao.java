@@ -31,21 +31,21 @@ public class Evolucao
 		geracoes.add(geracao);
 	}
 	
-	public static void CriarNovaGeracao()
+	public static void CriarNovaGeracao(Individuo[] sobreviventes)
 	{
 		/*
 		 * crossover / mutacao
 		 * adiciona em nova populaca
-		 * 		  
+		 *  		  
 		 * */
 		
 		if(GetUltimaGeracao().id > 5000)
 		{
-			System.out.println("WAT????? id = " + GetUltimaGeracao().id);
+			System.out.println("ALGO ESTRANHOOOOOOOOOOOO geracao.id = " + GetUltimaGeracao().id);
 		}
 		
-		Individuo[] filhos = GetUltimaGeracao().Crossover();
-		Geracao geracao = new Geracao(GetUltimaGeracao().id + 1, filhos);
+		Individuo[] novaPopulacao = GetUltimaGeracao().Crossover(sobreviventes);
+		Geracao geracao = new Geracao(GetUltimaGeracao().id + 1, novaPopulacao);
 		geracoes.add(geracao);		
 	}
 	
@@ -60,7 +60,7 @@ public class Evolucao
 		
 		for (Individuo individuo : geracoes.get(geracoes.size() - 1).individuos)
 		{			
-			boolean solucao = individuo.ataques == 0;
+			boolean solucao = individuo.CalcularAptidao() == 0;
 			ImprimirIndividuo(individuo, indexHelp, solucao);
 			
 			if(solucao)
@@ -89,7 +89,7 @@ public class Evolucao
 			}
 			if (r == 7)
 			{
-				System.out.println(individuo.tabuleiroArray[r] + "] => attacks: " + individuo.ataques + solucaoStr);
+				System.out.println(individuo.tabuleiroArray[r] + "] => attacks: " + individuo.CalcularAptidao() + solucaoStr);
 			}
 			else
 			{

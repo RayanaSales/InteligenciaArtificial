@@ -1,12 +1,15 @@
 package rainhas;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class Geracao
 {
 	int id = 0;	
 	Individuo[] individuos = new Individuo[Main.TAMANHO_POPULACAO]; // pais	
-	private Individuo[] maisAptos = new Individuo[Main.TAMANHO_POPULACAO]; // pais mais aptos
 		
 	public Geracao(int id)
 	{
@@ -22,90 +25,126 @@ public class Geracao
 	public boolean AvaliarIndividuos()
 	{
 		/*
-		 * Nessa geracao, ha uma solucao? Ainda nao achou solucao = return true / else false
+		 * Nessa geracao, ha uma solucao?
 		 * 
 		 */	
 		for (Individuo individuo : individuos)
-		{
-			individuo.CalcularAptidao();
-			if (individuo.ataques == 0)
+		{			
+			if (individuo.CalcularAptidao() == 0)
 			{								
 				return false;
-			}	
+			}
 		}		
 		return true;
 	}
 	
-	public void SelecionarMaisAptos()
+	public Individuo[] SelecaoNatural()
 	{		
-		Random sorteia = new Random();	
-		
-		for(int a = 0 ; a < Main.TAMANHO_POPULACAO ; a++)
+		/*
+		 * TORNEIO - 250 MORREM
+		 * 
+		 * */
+				
+		Random sorteia = new Random();		
+		Individuo[] sobreviventes = new Individuo[Main.TAMANHO_POPULACAO / 2];
+		List<Integer> sorteados = new ArrayList<Integer>(); //para nao sortear o mesmo elemento duas vezes
+				
+		for(int a = 0 ; (a < Main.TAMANHO_POPULACAO / 2 ); a++)
 		{
-			int i = sorteia.nextInt(Main.TAMANHO_POPULACAO);
-			int j = sorteia.nextInt(Main.TAMANHO_POPULACAO);				
-			while (i == j){
-				j = sorteia.nextInt(Main.TAMANHO_POPULACAO);	
+			int i = sorteia.nextInt(individuos.length);			
+			while(sorteados.contains(i))
+			{
+				i = sorteia.nextInt(individuos.length);
 			}
-			maisAptos[a] = (individuos[i].ataques < individuos[j].ataques ? individuos[i] : individuos[j]);
+			sorteados.add(i);
+			
+			int j = sorteia.nextInt(individuos.length);				
+			while(sorteados.contains(j))
+			{
+				j = sorteia.nextInt(individuos.length);
+			}
+			sorteados.add(j);
+			
+			int i_ataques = individuos[i].CalcularAptidao();
+			int j_ataques = individuos[j].CalcularAptidao();
+			
+			sobreviventes[a] = (i_ataques < j_ataques ? individuos[i] : individuos[j]);			
 		}
+		
+		return sobreviventes;
 	}
 
-	public Individuo[] Crossover()
+	public Individuo[] Crossover(Individuo[] sobreviventes)
 	{	
-		Random sorteia = new Random();	
-		Individuo[] filhos = new Individuo[Main.TAMANHO_POPULACAO];
+		/*
+		 * GERA 250 NOVOS FILHOS A PARTIR DOS 250 SOBREVIVENTES.
+		 * RETORNA A CONCATENACAO DOS SOBREVIVENTES COM OS FILHOS.
+		 * 
+		 * */
 		
-		for (int i = 0; i < Main.TAMANHO_POPULACAO; i++)
+		int tamanho_cromossomo = 24;
+		int qtd_filhos = Main.TAMANHO_POPULACAO - sobreviventes.length;
+		
+		Random sorteia = new Random();			
+		String[] cromossomo_mascara = new String[tamanho_cromossomo];
+		
+		Individuo[] filhos = new Individuo[qtd_filhos];
+		
+		for(int i = 0; i < tamanho_cromossomo; i++)
 		{
-			if (i < maisAptos.length - 1) //se nao for o ultimo
-			{
-					int posicaoCorte = sorteia.nextInt(22);
-					
-					//trocar os rabinhos
-					String f1 = maisAptos[i].tabuleiroStr.substring(0, posicaoCorte) + 
-								maisAptos[i + 1].tabuleiroStr.substring(posicaoCorte, 24);
-					
-					String f2 = maisAptos[i + 1].tabuleiroStr.substring(0, posicaoCorte) + 
-							maisAptos[i].tabuleiroStr.substring(posicaoCorte, 24);	
-					
-					Individuo i1 = new Individuo(f1);
-					Individuo i2 = new Individuo(f2);
-					
-					if(AplicarMutacao())
-					{
-						System.out.println("mutando...");
-						i2 = GerarMutante(i2);
-					}
-					
-					filhos[i] = i1;
-					filhos[i + 1] = i2;
-			}
+			cromossomo_mascara[i] = Integer.toString(sorteia.nextInt(2));
 		}
-		return filhos;
+		
+		for(int i = 0 ; i < sobreviventes.length - 1; i++)
+		{
+			Individuo pai = sobreviventes[i];
+			Individuo mae = sobreviventes[i + 1];
+			
+			String cromossomo_filho = "";
+			String cromossomo_filha = "";
+			
+			for(int j = 0 ; j < tamanho_cromossomo ; j++)
+			{
+				if(cromossomo_mascara[j].equals("0"))
+				{
+					cromossomo_filho += mae.tabuleiroStr.charAt(j);
+					cromossomo_filha += pai.tabuleiroStr.charAt(j);
+				}
+				else
+				{
+					cromossomo_filho += pai.tabuleiroStr.charAt(j);
+					cromossomo_filha += mae.tabuleiroStr.charAt(j);
+				}
+			}
+			
+			filhos[i] = AplicarMutacao(new Individuo(cromossomo_filho));
+			filhos[i + 1] = AplicarMutacao(new Individuo(cromossomo_filha));
+		}
+		
+		Individuo[] novaPopulacao = Stream.concat(Arrays.stream(filhos), Arrays.stream(sobreviventes))
+                .toArray(Individuo[]::new);
+		
+		return novaPopulacao;
 	}
 	
-	private boolean AplicarMutacao()
+	private Individuo AplicarMutacao(Individuo filho)
 	{
 		double randon = new Random().nextDouble() * 1;		
 		
 		if(randon < Main.TAXA_MUTACA0)
 		{
-			return true;
+			//System.out.println("mutando individuo...");
+			
+			char[] novoTabuleiroStr = filho.tabuleiroStr.toCharArray();
+			Random sorteia = new Random();
+			int posicao = sorteia.nextInt(24);
+		
+			novoTabuleiroStr[posicao] = (filho.tabuleiroStr.charAt(posicao) == '1' ? '0' : '1');
+			
+			filho.tabuleiroStr = new String(novoTabuleiroStr);		
+			return filho;
 		}
 		
-		return false;
-	}	
-	
-	private Individuo GerarMutante(Individuo filho)
-	{
-		char[] novoTabuleiroStr = filho.tabuleiroStr.toCharArray();
-		Random sorteia = new Random();
-		int posicao = sorteia.nextInt(24);
-	
-		novoTabuleiroStr[posicao] = (filho.tabuleiroStr.charAt(posicao) == '1' ? '0' : '1');
-		
-		filho.tabuleiroStr = new String(novoTabuleiroStr);		
 		return filho;
 	}
 }
