@@ -37,23 +37,23 @@ public class Individuo
 		}			
 	}
 	
-	public void Codificar()
-	{
-		/*
-		 * Converte o array de inteiros, para tabuleiroStr (binario) */
-		
-		tabuleiroStr = "";
-		for (Integer valor : tabuleiroArray)
-		{
-			String valorBase2 = Integer.toBinaryString(valor);				
-			while(valorBase2.length() != 3)
-			{
-				valorBase2 = "0" + valorBase2;
-			}				
-			tabuleiroStr += valorBase2;
-		}
-		System.out.println();
-	}
+//	public void Codificar()
+//	{
+//		/*
+//		 * Converte o array de inteiros, para tabuleiroStr (binario) */
+//		
+//		tabuleiroStr = "";
+//		for (Integer valor : tabuleiroArray)
+//		{
+//			String valorBase2 = Integer.toBinaryString(valor);				
+//			while(valorBase2.length() != 3)
+//			{
+//				valorBase2 = "0" + valorBase2;
+//			}				
+//			tabuleiroStr += valorBase2;
+//		}
+//		System.out.println();
+//	}
 	
 	public int CalcularAptidao()
 	{	

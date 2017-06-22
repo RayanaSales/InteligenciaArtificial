@@ -1,10 +1,6 @@
 package rainhas;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
 public class Geracao
 {
@@ -29,7 +25,7 @@ public class Geracao
 		 * 
 		 */	
 		for (Individuo individuo : individuos)
-		{			
+		{
 			if (individuo.CalcularAptidao() == 0)
 			{								
 				return false;
@@ -40,31 +36,14 @@ public class Geracao
 	
 	public Individuo[] SelecaoNatural()
 	{		
-		/*
-		 * TORNEIO - 250 MORREM
-		 * 
-		 * */
-				
+						
 		Random sorteia = new Random();		
-		Individuo[] sobreviventes = new Individuo[Main.TAMANHO_POPULACAO / 2];
-		List<Integer> sorteados = new ArrayList<Integer>(); //para nao sortear o mesmo elemento duas vezes
-				
-		for(int a = 0 ; (a < Main.TAMANHO_POPULACAO / 2 ); a++)
+		Individuo[] sobreviventes = new Individuo[Main.TAMANHO_POPULACAO];
+						
+		for(int a = 0 ; a < Main.TAMANHO_POPULACAO ; a++)
 		{
-			int i = sorteia.nextInt(individuos.length);			
-			while(sorteados.contains(i))
-			{
-				i = sorteia.nextInt(individuos.length);
-			}
-			sorteados.add(i);
-			
-			int j = sorteia.nextInt(individuos.length);				
-			while(sorteados.contains(j))
-			{
-				j = sorteia.nextInt(individuos.length);
-			}
-			sorteados.add(j);
-			
+			int i = sorteia.nextInt(individuos.length);
+			int j = sorteia.nextInt(individuos.length);
 			int i_ataques = individuos[i].CalcularAptidao();
 			int j_ataques = individuos[j].CalcularAptidao();
 			
@@ -77,25 +56,21 @@ public class Geracao
 	public Individuo[] Crossover(Individuo[] sobreviventes)
 	{	
 		/*
-		 * GERA 250 NOVOS FILHOS A PARTIR DOS 250 SOBREVIVENTES.
-		 * RETORNA A CONCATENACAO DOS SOBREVIVENTES COM OS FILHOS.
+		 * GERA 500 FILHOS A PARTIR DOS 250 SOBREVIVENTES
 		 * 
 		 * */
 		
-		int tamanho_cromossomo = 24;
-		int qtd_filhos = Main.TAMANHO_POPULACAO - sobreviventes.length;
-		
+		int tamanho_cromossomo = 24, filhos_index = 0;				
 		Random sorteia = new Random();			
-		String[] cromossomo_mascara = new String[tamanho_cromossomo];
-		
-		Individuo[] filhos = new Individuo[qtd_filhos];
+		String[] cromossomo_mascara = new String[tamanho_cromossomo];		
+		Individuo[] filhos = new Individuo[Main.TAMANHO_POPULACAO];
 		
 		for(int i = 0; i < tamanho_cromossomo; i++)
 		{
 			cromossomo_mascara[i] = Integer.toString(sorteia.nextInt(2));
 		}
 		
-		for(int i = 0 ; i < sobreviventes.length - 1; i++)
+		for(int i = 0 ; i < (Main.TAMANHO_POPULACAO / 2); i++)
 		{
 			Individuo pai = sobreviventes[i];
 			Individuo mae = sobreviventes[i + 1];
@@ -117,34 +92,42 @@ public class Geracao
 				}
 			}
 			
-			filhos[i] = AplicarMutacao(new Individuo(cromossomo_filho));
-			filhos[i + 1] = AplicarMutacao(new Individuo(cromossomo_filha));
+			Individuo filho = Mutacionar(new Individuo(cromossomo_filho));
+			Individuo filha = Mutacionar(new Individuo(cromossomo_filha));
+			
+			filhos[filhos_index++] = filho;
+			filhos[filhos_index++] = filha;
 		}
-		
-		Individuo[] novaPopulacao = Stream.concat(Arrays.stream(filhos), Arrays.stream(sobreviventes))
-                .toArray(Individuo[]::new);
-		
-		return novaPopulacao;
+				
+		return filhos;
 	}
 	
-	private Individuo AplicarMutacao(Individuo filho)
+	private Individuo Mutacionar(Individuo filho)
 	{
-		double randon = new Random().nextDouble() * 1;		
-		
-		if(randon < Main.TAXA_MUTACA0)
+		char[] novoTabuleiroStr = filho.tabuleiroStr.toCharArray();
+					
+		for(int i = 0 ; i < filho.tabuleiroStr.length() ; i++)
 		{
-			//System.out.println("mutando individuo...");
-			
-			char[] novoTabuleiroStr = filho.tabuleiroStr.toCharArray();
-			Random sorteia = new Random();
-			int posicao = sorteia.nextInt(24);
-		
-			novoTabuleiroStr[posicao] = (filho.tabuleiroStr.charAt(posicao) == '1' ? '0' : '1');
-			
-			filho.tabuleiroStr = new String(novoTabuleiroStr);		
-			return filho;
+			if(AplicarMutacao())
+			{
+				novoTabuleiroStr[i] = (filho.tabuleiroStr.charAt(i) == '1' ? '0' : '1');
+			}
 		}
 		
+		filho.tabuleiroStr = new String(novoTabuleiroStr);		
 		return filho;
+	}
+	
+	private boolean AplicarMutacao()
+	{
+		double randon = new Random().nextDouble();		
+
+		if(randon < Main.TAXA_MUTACA0)
+		{
+			//System.out.println("mutante...");
+			return true;
+		}
+		
+		return false;
 	}
 }
