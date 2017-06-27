@@ -34,6 +34,19 @@ public class Geracao
 		return true;
 	}
 	
+	public Individuo BuscarMelhorSolucao()
+	{
+		Individuo melhor = individuos[0];		
+		for (Individuo individuo : individuos)
+		{
+			if(individuo.CalcularAptidao() < melhor.CalcularAptidao())
+			{
+				melhor = individuo;
+			}
+		}		
+		return melhor;
+	}
+	
 	public Individuo[] SelecaoNatural()
 	{		
 						
@@ -90,44 +103,37 @@ public class Geracao
 					cromossomo_filho += pai.tabuleiroStr.charAt(j);
 					cromossomo_filha += mae.tabuleiroStr.charAt(j);
 				}
-			}
-			
-			Individuo filho = Mutacionar(new Individuo(cromossomo_filho));
-			Individuo filha = Mutacionar(new Individuo(cromossomo_filha));
+			}			
+			Individuo filho = new Individuo(cromossomo_filho);
+			Individuo filha = new Individuo(cromossomo_filha);
 			
 			filhos[filhos_index++] = filho;
 			filhos[filhos_index++] = filha;
 		}
-				
+		
+		if(AplicarMutacao())
+		{
+			filhos = Mutacionar(filhos);
+		}
+		
 		return filhos;
 	}
 	
-	private Individuo Mutacionar(Individuo filho)
+	private Individuo[] Mutacionar(Individuo[] filhos)
 	{
-		char[] novoTabuleiroStr = filho.tabuleiroStr.toCharArray();
-					
-		for(int i = 0 ; i < filho.tabuleiroStr.length() ; i++)
-		{
-			if(AplicarMutacao())
-			{
-				novoTabuleiroStr[i] = (filho.tabuleiroStr.charAt(i) == '1' ? '0' : '1');
-			}
-		}
+		Random sorteia = new Random();
+		int index_filho = sorteia.nextInt(filhos.length);
+		int index_tabuleiro = sorteia.nextInt(filhos[index_filho].tabuleiroStr.length());
+		char[] novoTabuleiroStr = filhos[index_filho].tabuleiroStr.toCharArray();				
 		
-		filho.tabuleiroStr = new String(novoTabuleiroStr);		
-		return filho;
+		novoTabuleiroStr[index_tabuleiro] = (filhos[index_filho].tabuleiroStr.charAt(index_tabuleiro) == '1' ? '0' : '1');
+		filhos[index_filho].tabuleiroStr = new String(novoTabuleiroStr);			
+		return filhos;
 	}
 	
 	private boolean AplicarMutacao()
 	{
-		double randon = new Random().nextDouble();		
-
-		if(randon < Main.TAXA_MUTACA0)
-		{
-			//System.out.println("mutante...");
-			return true;
-		}
-		
-		return false;
+		double randon = new Random().nextDouble();	
+		return (randon < Main.TAXA_MUTACA0 ? true : false);
 	}
 }

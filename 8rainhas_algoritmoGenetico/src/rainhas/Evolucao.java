@@ -39,11 +39,6 @@ public class Evolucao
 		 *  		  
 		 * */
 		
-		if(GetUltimaGeracao().id > 5000)
-		{
-			System.out.println("ALGO ESTRANHOOOOOOOOOOOO geracao.id = " + GetUltimaGeracao().id);
-		}
-		
 		Individuo[] novaPopulacao = GetUltimaGeracao().Crossover(sobreviventes);
 		Geracao geracao = new Geracao(GetUltimaGeracao().id + 1, novaPopulacao);
 		geracoes.add(geracao);		
@@ -71,7 +66,16 @@ public class Evolucao
 			indexHelp++;
 		}
 		
-		System.out.println("\nSOLUÇÃO ENCONTRADA NA GERAÇÃO: " + geracao_solucao_id + " NO INDIVÍDUO: " + individuo_solucao_id);
+		if(geracao_solucao_id == Main.QUANTIDADE_GERACOES && Evolucao.GetUltimaGeracao().AvaliarIndividuos())
+		{
+			Individuo melhor = Evolucao.GetUltimaGeracao().BuscarMelhorSolucao();
+			System.out.println("MELHOR SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + geracao_solucao_id + " NO INDIVÍDUO: " + individuo_solucao_id + " COM " + melhor.CalcularAptidao() + " ATAQUES.");
+		}
+		else
+		{
+			System.out.println("SOLUÇÃO ENCONTRADA NA GERAÇÃO: " + geracao_solucao_id + " NO INDIVÍDUO: " + individuo_solucao_id + " COM 0 ATAQUES.");
+		}
+		
 	}
 
 	public static void ImprimirIndividuo(Individuo individuo, int id, boolean solucao)

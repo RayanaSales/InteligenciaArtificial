@@ -2,31 +2,27 @@ package rainhas;
 
 public class Main
 {
-	public static int TAMANHO_POPULACAO = 500;
+	public static int QUANTIDADE_GERACOES = 3000;
+	public static int TAMANHO_POPULACAO = 100;
 	public static double TAXA_MUTACA0 = 0.002;
 		
 	public static void main(String[] args)
 	{	
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 1; i++)
 		{
-			System.out.print("Execução " + i);
+			System.out.print("Execução " + i + " => ");
 			main2();
 		}
 	}
 	
 	public static void main2()
 	{
-		Evolucao.GerarPopulacaoInicial();
-		//System.out.println("Geração " + Evolucao.GetUltimaGeracao().id + " criada");
-		
-		while(Evolucao.GetUltimaGeracao().AvaliarIndividuos())
+		Evolucao.GerarPopulacaoInicial();		
+		while(Evolucao.GetUltimaGeracao().AvaliarIndividuos() && Evolucao.GetUltimaGeracao().id < Main.QUANTIDADE_GERACOES)
 		{
 			Individuo[] sobreviventes = Evolucao.GetUltimaGeracao().SelecaoNatural();
-			Evolucao.CriarNovaGeracao(sobreviventes);
-			//System.out.println("Geração " + Evolucao.GetUltimaGeracao().id + " criada");
-		}
-		//Evolucao.ImprimirUltimaGeracao();	
-		
-		System.out.println(" acabou na geração " + Evolucao.GetUltimaGeracao().id);
+			Evolucao.CriarNovaGeracao(sobreviventes);			
+		}		
+		Evolucao.ImprimirUltimaGeracao();
 	}
 }
