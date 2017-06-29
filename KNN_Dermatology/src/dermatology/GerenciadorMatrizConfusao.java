@@ -68,8 +68,7 @@ public class GerenciadorMatrizConfusao
 					}
 				}
 				workbook.write();
-				workbook.close();
-				System.out.println();
+				workbook.close();				
 			}
 		}
 		catch (IOException e)
@@ -85,6 +84,6 @@ public class GerenciadorMatrizConfusao
 			e.printStackTrace();
 		}
 
-		System.out.println("Verifique o diretorio git\\InteligenciaArtificial\\KNN_Dermatology...");
+		System.out.println("\nVerifique o diretorio git\\InteligenciaArtificial\\KNN_Dermatology...");
 	}
 }

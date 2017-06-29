@@ -26,7 +26,7 @@ public class Classificador
 	{
 		// for each elementoTreinamento in tabela_treinamento
 		//		calcule a distancia de teste para elementoTreinamento
-		//		guarde o distancia no objeto distância, insira esse obj em uma lista	
+		//		guarde o distancia no objeto distï¿½ncia, insira esse obj em uma lista	
 				
 		for (Tupla tupla : treinamento)
 		{		
@@ -48,7 +48,7 @@ public class Classificador
 			distancias.add(distancia);
 		}
 		
-		//ordene a lista pela distância
+		//ordene a lista pela distï¿½ncia
 		Collections.sort(distancias, new Comparator<Distancia>()
 		{
 			@Override
@@ -64,7 +64,7 @@ public class Classificador
 	{
 		// for (int k= 1; k <= 11 ; k = k + 2)
 		//		var primeiros = k primeiros elementos da lista de distancias
-		//		qual a doença mais comum entre os k primeiros? (resposta_classific)
+		//		qual a doenï¿½a mais comum entre os k primeiros? (resposta_classific)
 		//		pegue no banco, a resposta_correta de Ti
 		//		compare os resultados e atualize o objeto matrizConfusao onde id = k
 						
@@ -82,14 +82,11 @@ public class Classificador
 		 * PREPARANDO O AMBIENTE 
 		 * 1- ler cada linha do arquivo 
 		 * 2- cria um objeto tupla com os dados da linha lida 
-		 * 3- coloca esse objeto em uma lista de tuplas 
-		 * 4- divide essa lista: sorteia 70 por cento para aprender, e 30 para testar
+		 * 3- coloca esse objeto em uma lista de tuplas (treinamento)
+		 * 4- separa quem eh teste e quem eh treinamento
 		 */
-		Random random = new Random();
 		
-		int QTD_ELEMENTOS_PARA_TESTE = 0;		 
-		int sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS);		
-		List<Integer> sorteados = new ArrayList<>(); //valores ja sorteados (para popular a lista de teste)
+		// LENDO ARQUIVO
 				
 		BufferedReader in = new BufferedReader(new FileReader("dermatology.data"));		
 		String line;
@@ -113,35 +110,42 @@ public class Classificador
 			}
 		in.close();		
 		
-		//sorteia que eh teste e quem eh treinamento	
-		QTD_ELEMENTOS_PARA_TESTE = Math.round((treinamento.size() * Main.TESTE_PORCENTAGEM) / 100);
-				
-		for(int i = 0 ; i< QTD_ELEMENTOS_PARA_TESTE ; i++)
-		{		
-			while(sorteados.contains(sorteado)) //sortei numeros diferentes dos ja sorteados
-			{
-				sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS); 				
-			} 
-			
-			sorteados.add(sorteado);                 
-            tupla = BuscarElemento(sorteado, treinamento);
-            teste.add(tupla);
-            treinamento.remove(tupla); 
-            sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS);
-		}	
-		System.out.println();
-	}
-	
-	private Tupla BuscarElemento(int id, List<Tupla> dataset)
-	{
-		for (Tupla tupla : dataset)
+		// SEPARANDO TESTE DE TREINAMENTO	
+		
+		Collections.sort(treinamento, new Comparator<Tupla>()
 		{
-			if(tupla.id == id)
+			@Override
+			public int compare(Tupla b, Tupla b1)
 			{
-				return tupla;
+				// -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+				return b1.RESPOSTA_REAL.getNumVal() > b.RESPOSTA_REAL.getNumVal() ? -1 : (b1.RESPOSTA_REAL.getNumVal() < b.RESPOSTA_REAL.getNumVal()) ? 1 : 0;
 			}
-		}
-		return null;
+		});
+			
+		/*
+		 * 1- separo cada grupo em listas
+		 * 2- os 10 primeiros elementos de cada lista, fica em treinamento, o resto vai para teste
+		 */
+		
+		// adicionando os restos em teste
+		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(0, 111))); //GRUPO 1
+		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(111, 171))); //GRUPO 2
+		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(171, 242))); //GRUPO 3
+		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(242, 290))); //GRUPO 4
+		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(290, 338))); //GRUPO 5
+		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(338, 358))); //GRUPO 6
+		
+		// removendo de treinamento, todo mundo que eh de teste
+		for (Tupla tupla2 : teste)
+		{
+			treinamento.remove(tupla2);
+		}		
+		Collections.shuffle(treinamento);
+	}
+		
+	private void AdicionarElementosAoTeste(List<Tupla> grupo)
+	{
+		teste.addAll(grupo.subList(Main.QTD_ELEMENTOS_TESTE, grupo.size()));
 	}
 	
 	private Diagnostico AcharMaisComum(List<Distancia> proximos)
