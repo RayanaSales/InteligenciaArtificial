@@ -18,7 +18,7 @@ public class Classificador
 	public void Classificar(Tupla teste) throws IOException, InterruptedException
 	{
 		CalcularDistancias(teste);
-		MontarMatrizConfusao(teste.RESPOSTA_REAL);
+		MontarMatrizConfusao(teste);
 	}
 	
 	private void CalcularDistancias(Tupla teste) throws InterruptedException
@@ -59,7 +59,7 @@ public class Classificador
 		});
 	}
 	
-	private void MontarMatrizConfusao(Diagnostico RESPOSTA_REAL)
+	private void MontarMatrizConfusao(Tupla teste)
 	{
 		// for (int k= 1; k <= 11 ; k = k + 2)
 		//		var primeiros = k primeiros elementos da lista de distancias
@@ -71,13 +71,14 @@ public class Classificador
 		{
 			List<Distancia> proximos = distancias.subList(0, k);
 			Diagnostico resultadoClassificacao = AcharMaisComum(proximos);
-			Main.MATRIZ_CONFUSAO.InserirResultado(k, RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
+			teste.RESULTADO_CLASSIFICACAO = resultadoClassificacao;
+			Main.MATRIZ_CONFUSAO.InserirResultado(k, teste.RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
 		}
 	}
 		
 	public void PrepararAmbiente() throws IOException
 	{				
-		// LENDO ARQUIVOS
+		System.out.println("Lendo arquivos...");
 				
 		String line;
 		int id = 1;

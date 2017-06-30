@@ -40,6 +40,7 @@ public class Tupla
 			age; // 34
 
 	Diagnostico RESPOSTA_REAL;
+	Diagnostico RESULTADO_CLASSIFICACAO;
 
 	public Tupla(int id, int erythema, int scaling, int definiteBorders, int itching, int koebnerPhenomenon,
 			int polygonalPapules, int follicularPapules, int oralMucosalInvolvement, int kneeAndElbowInvolvement,

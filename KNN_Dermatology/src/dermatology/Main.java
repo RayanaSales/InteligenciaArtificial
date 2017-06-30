@@ -11,9 +11,7 @@ public class Main
 		
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
-		Classificador classificador = new Classificador();
-		
-		System.out.println("Preparando ambiente...");
+		Classificador classificador = new Classificador();		
 		classificador.PrepararAmbiente();
 		
 		System.out.println("Classificando...");		
@@ -22,7 +20,7 @@ public class Main
 			classificador.Classificar(tupla);
 		}
 	
-		MATRIZ_CONFUSAO.CriarXLS();		
+		//MATRIZ_CONFUSAO.CriarXLS();		
+		MATRIZ_CONFUSAO.ImprimirMatrizes();
 	}
-
 }
