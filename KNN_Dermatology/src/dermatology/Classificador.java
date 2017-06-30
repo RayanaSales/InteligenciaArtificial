@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 public class Classificador
 {
@@ -77,75 +76,52 @@ public class Classificador
 	}
 		
 	public void PrepararAmbiente() throws IOException
-	{
-		/*
-		 * PREPARANDO O AMBIENTE 
-		 * 1- ler cada linha do arquivo 
-		 * 2- cria um objeto tupla com os dados da linha lida 
-		 * 3- coloca esse objeto em uma lista de tuplas (treinamento)
-		 * 4- separa quem eh teste e quem eh treinamento
-		 */
-		
-		// LENDO ARQUIVO
+	{				
+		// LENDO ARQUIVOS
 				
-		BufferedReader in = new BufferedReader(new FileReader("dermatology.data"));		
 		String line;
 		int id = 1;
 		Tupla tupla = null;
-		int[] data = null;
+		int[] data = null;		
+		BufferedReader in = new BufferedReader(new FileReader("treinamento.data"));		
 		
-			while((line = in.readLine()) != null)
-			{
-				String[] dataString = line.split(",");
-				data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
-				
-				Diagnostico diagnosticoReal = Diagnostico.values()[data[34] - 1]; //pq os elementos do diagnostico vao de 0 a 5. Mas no arquivo esta de 1 a 6
-				
-				tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
-						data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 
-						data[25], data[26], data[27], data[28], data[29], data[30], data[31], data[32], data[33], diagnosticoReal);
-				
-				treinamento.add(tupla);
-				id++;
-			}
-		in.close();		
-		
-		// SEPARANDO TESTE DE TREINAMENTO	
-		
-		Collections.sort(treinamento, new Comparator<Tupla>()
+		while((line = in.readLine()) != null)
 		{
-			@Override
-			public int compare(Tupla b, Tupla b1)
-			{
-				// -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-				return b1.RESPOSTA_REAL.getNumVal() > b.RESPOSTA_REAL.getNumVal() ? -1 : (b1.RESPOSTA_REAL.getNumVal() < b.RESPOSTA_REAL.getNumVal()) ? 1 : 0;
-			}
-		});
+			String[] dataString = line.split(",");
+			data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
 			
-		/*
-		 * 1- separo cada grupo em listas
-		 * 2- os 10 primeiros elementos de cada lista, fica em treinamento, o resto vai para teste
-		 */
+			Diagnostico diagnosticoReal = Diagnostico.values()[data[34] - 1]; //pq os elementos do diagnostico vao de 0 a 5. Mas no arquivo esta de 1 a 6
+			
+			tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
+					data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 
+					data[25], data[26], data[27], data[28], data[29], data[30], data[31], data[32], data[33], diagnosticoReal);
+			
+			treinamento.add(tupla);
+			id++;
+		}
+		in.close();
 		
-		// adicionando os restos em teste
-		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(0, 111))); //GRUPO 1
-		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(111, 171))); //GRUPO 2
-		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(171, 242))); //GRUPO 3
-		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(242, 290))); //GRUPO 4
-		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(290, 338))); //GRUPO 5
-		AdicionarElementosAoTeste(new ArrayList<Tupla>(treinamento.subList(338, 358))); //GRUPO 6
+		line = "";
+		id = 1;
+		tupla = null;
+		data = null;		
+		in = new BufferedReader(new FileReader("teste.data"));	
 		
-		// removendo de treinamento, todo mundo que eh de teste
-		for (Tupla tupla2 : teste)
+		while((line = in.readLine()) != null)
 		{
-			treinamento.remove(tupla2);
-		}		
-		Collections.shuffle(treinamento);
-	}
-		
-	private void AdicionarElementosAoTeste(List<Tupla> grupo)
-	{
-		teste.addAll(grupo.subList(Main.QTD_ELEMENTOS_TESTE, grupo.size()));
+			String[] dataString = line.split(",");
+			data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
+			
+			Diagnostico diagnosticoReal = Diagnostico.values()[data[34] - 1]; //pq os elementos do diagnostico vao de 0 a 5. Mas no arquivo esta de 1 a 6
+			
+			tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
+					data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 
+					data[25], data[26], data[27], data[28], data[29], data[30], data[31], data[32], data[33], diagnosticoReal);
+			
+			teste.add(tupla);
+			id++;
+		}
+		in.close();
 	}
 	
 	private Diagnostico AcharMaisComum(List<Distancia> proximos)
