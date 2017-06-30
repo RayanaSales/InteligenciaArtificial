@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 public class Classificador
 {
@@ -19,14 +18,14 @@ public class Classificador
 	public void Classificar(Tupla teste) throws IOException, InterruptedException
 	{
 		CalcularDistancias(teste);
-		MontarMatrizConfusao(teste.RESPOSTA_REAL);
+		MontarMatrizConfusao(teste);
 	}
 	
 	private void CalcularDistancias(Tupla teste) throws InterruptedException
 	{
 		// for each elementoTreinamento in tabela_treinamento
 		//		calcule a distancia de teste para elementoTreinamento
-		//		guarde o distancia no objeto distância, insira esse obj em uma lista	
+		//		guarde o distancia no objeto distï¿½ncia, insira esse obj em uma lista	
 				
 		for (Tupla tupla : treinamento)
 		{		
@@ -48,7 +47,7 @@ public class Classificador
 			distancias.add(distancia);
 		}
 		
-		//ordene a lista pela distância
+		//ordene a lista pela distï¿½ncia
 		Collections.sort(distancias, new Comparator<Distancia>()
 		{
 			@Override
@@ -60,11 +59,11 @@ public class Classificador
 		});
 	}
 	
-	private void MontarMatrizConfusao(Diagnostico RESPOSTA_REAL)
+	private void MontarMatrizConfusao(Tupla teste)
 	{
 		// for (int k= 1; k <= 11 ; k = k + 2)
 		//		var primeiros = k primeiros elementos da lista de distancias
-		//		qual a doença mais comum entre os k primeiros? (resposta_classific)
+		//		qual a doenï¿½a mais comum entre os k primeiros? (resposta_classific)
 		//		pegue no banco, a resposta_correta de Ti
 		//		compare os resultados e atualize o objeto matrizConfusao onde id = k
 						
@@ -72,76 +71,58 @@ public class Classificador
 		{
 			List<Distancia> proximos = distancias.subList(0, k);
 			Diagnostico resultadoClassificacao = AcharMaisComum(proximos);
-			Main.MATRIZ_CONFUSAO.InserirResultado(k, RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
+			teste.RESULTADO_CLASSIFICACAO = resultadoClassificacao;
+			Main.MATRIZ_CONFUSAO.InserirResultado(k, teste.RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
 		}
 	}
 		
 	public void PrepararAmbiente() throws IOException
-	{
-		/*
-		 * PREPARANDO O AMBIENTE 
-		 * 1- ler cada linha do arquivo 
-		 * 2- cria um objeto tupla com os dados da linha lida 
-		 * 3- coloca esse objeto em uma lista de tuplas 
-		 * 4- divide essa lista: sorteia 70 por cento para aprender, e 30 para testar
-		 */
-		Random random = new Random();
-		
-		int QTD_ELEMENTOS_PARA_TESTE = 0;		 
-		int sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS);		
-		List<Integer> sorteados = new ArrayList<>(); //valores ja sorteados (para popular a lista de teste)
+	{				
+		System.out.println("Lendo arquivos...");
 				
-		BufferedReader in = new BufferedReader(new FileReader("dermatology.data"));		
 		String line;
 		int id = 1;
 		Tupla tupla = null;
-		int[] data = null;
+		int[] data = null;		
+		BufferedReader in = new BufferedReader(new FileReader("treinamento.data"));		
 		
-			while((line = in.readLine()) != null)
-			{
-				String[] dataString = line.split(",");
-				data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
-				
-				Diagnostico diagnosticoReal = Diagnostico.values()[data[34] - 1]; //pq os elementos do diagnostico vao de 0 a 5. Mas no arquivo esta de 1 a 6
-				
-				tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
-						data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 
-						data[25], data[26], data[27], data[28], data[29], data[30], data[31], data[32], data[33], diagnosticoReal);
-				
-				treinamento.add(tupla);
-				id++;
-			}
-		in.close();		
-		
-		//sorteia que eh teste e quem eh treinamento	
-		QTD_ELEMENTOS_PARA_TESTE = Math.round((treinamento.size() * Main.TESTE_PORCENTAGEM) / 100);
-				
-		for(int i = 0 ; i< QTD_ELEMENTOS_PARA_TESTE ; i++)
-		{		
-			while(sorteados.contains(sorteado)) //sortei numeros diferentes dos ja sorteados
-			{
-				sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS); 				
-			} 
-			
-			sorteados.add(sorteado);                 
-            tupla = BuscarElemento(sorteado, treinamento);
-            teste.add(tupla);
-            treinamento.remove(tupla); 
-            sorteado = random.nextInt(Main.QTD_ELEMENTOS_DISPONIVEIS);
-		}	
-		System.out.println();
-	}
-	
-	private Tupla BuscarElemento(int id, List<Tupla> dataset)
-	{
-		for (Tupla tupla : dataset)
+		while((line = in.readLine()) != null)
 		{
-			if(tupla.id == id)
-			{
-				return tupla;
-			}
+			String[] dataString = line.split(",");
+			data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
+			
+			Diagnostico diagnosticoReal = Diagnostico.values()[data[34] - 1]; //pq os elementos do diagnostico vao de 0 a 5. Mas no arquivo esta de 1 a 6
+			
+			tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
+					data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 
+					data[25], data[26], data[27], data[28], data[29], data[30], data[31], data[32], data[33], diagnosticoReal);
+			
+			treinamento.add(tupla);
+			id++;
 		}
-		return null;
+		in.close();
+		
+		line = "";
+		id = 1;
+		tupla = null;
+		data = null;		
+		in = new BufferedReader(new FileReader("teste.data"));	
+		
+		while((line = in.readLine()) != null)
+		{
+			String[] dataString = line.split(",");
+			data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
+			
+			Diagnostico diagnosticoReal = Diagnostico.values()[data[34] - 1]; //pq os elementos do diagnostico vao de 0 a 5. Mas no arquivo esta de 1 a 6
+			
+			tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
+					data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 
+					data[25], data[26], data[27], data[28], data[29], data[30], data[31], data[32], data[33], diagnosticoReal);
+			
+			teste.add(tupla);
+			id++;
+		}
+		in.close();
 	}
 	
 	private Diagnostico AcharMaisComum(List<Distancia> proximos)
