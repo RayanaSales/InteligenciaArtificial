@@ -19,8 +19,8 @@ function base = lerBaseDados(caminho)
 
    base = csvread(caminho); 
    
-   % [n,m] = size(base);
-   % disp(['base: linhas: ',num2str(n), ' colunas: ', num2str(m)])
+   [n,m] = size(base);
+    disp(['base: linhas: ',num2str(n), ' colunas: ', num2str(m)])
 
 end
 

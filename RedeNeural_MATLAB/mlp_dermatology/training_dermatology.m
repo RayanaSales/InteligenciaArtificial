@@ -11,12 +11,17 @@ function resultado = training_dermatology()
     resultado = classificar_mlp(amostras, rede_bp);    
 
     % Comparar resultado
-
+   
 end
 
 function [treinamento, teste] = lerBaseDados()
-   teste = fopen("teste.data", "r");
-   treinamento = fopen("treinamento.data", "r");
+   teste = csvread("teste.data");
+   treinamento = csvread("treinamento.data");
+   
+  % [n,m] = size(teste);
+  % disp(['teste: linhas: ',num2str(n), ' colunas: ', num2str(m)])    
+  % [a,b] = size(treinamento);
+  % disp(['treinamento: linhas: ',num2str(a), ' colunas: ', num2str(b)])
 end
 
 function [amostras, saidas] = ajustarBase(base)
