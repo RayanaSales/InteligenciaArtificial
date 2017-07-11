@@ -90,6 +90,7 @@ public class Classificador
 			houveTroca = false;
 		}
 		
+		CalcularCentros();		
 		return houveTroca;
 	}
 	

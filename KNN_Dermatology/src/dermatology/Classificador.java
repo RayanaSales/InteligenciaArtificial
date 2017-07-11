@@ -25,7 +25,7 @@ public class Classificador
 	{
 		// for each elementoTreinamento in tabela_treinamento
 		//		calcule a distancia de teste para elementoTreinamento
-		//		guarde o distancia no objeto dist�ncia, insira esse obj em uma lista	
+		//		guarde o distancia no objeto distancia, insira esse obj em uma lista	
 				
 		for (Tupla tupla : treinamento)
 		{		
@@ -47,7 +47,7 @@ public class Classificador
 			distancias.add(distancia);
 		}
 		
-		//ordene a lista pela dist�ncia
+		//ordene a lista pela distancia
 		Collections.sort(distancias, new Comparator<Distancia>()
 		{
 			@Override
@@ -63,7 +63,7 @@ public class Classificador
 	{
 		// for (int k= 1; k <= 11 ; k = k + 2)
 		//		var primeiros = k primeiros elementos da lista de distancias
-		//		qual a doen�a mais comum entre os k primeiros? (resposta_classific)
+		//		qual a doenca mais comum entre os k primeiros? (resposta_classific)
 		//		pegue no banco, a resposta_correta de Ti
 		//		compare os resultados e atualize o objeto matrizConfusao onde id = k
 						
@@ -132,8 +132,9 @@ public class Classificador
 		
 		for (Diagnostico d : Diagnostico.values())
 		{
+			//qts vezes tal elemento se repete na lista com java 8
 			popularidade = proximos.stream()
-					        .filter(p -> p.teste.RESPOSTA_REAL.equals(d))
+					        .filter(p -> p.treinamento.RESPOSTA_REAL.equals(d))
 					        .count();	
 			if(popularidade != 0)
 			{

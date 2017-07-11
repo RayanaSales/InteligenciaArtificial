@@ -2,7 +2,7 @@ package dermatology;
 
 public abstract class Distancia
 {
-	Tupla atual;
+	Tupla treinamento;
 	Tupla teste;
 	double distancia;
 	
@@ -13,7 +13,7 @@ public abstract class Distancia
 	
 	public Distancia(Tupla atual, Tupla teste)
 	{
-		this.atual = atual;
+		this.treinamento = atual;
 		this.teste = teste;
 		Calcular();
 	}

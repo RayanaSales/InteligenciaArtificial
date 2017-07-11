@@ -3,7 +3,7 @@ package rainhas;
 public class Main
 {
 	public static int QUANTIDADE_GERACOES = 3000;
-	public static int TAMANHO_POPULACAO = 100;
+	public static int TAMANHO_POPULACAO = 20;
 	public static double TAXA_MUTACA0 = 0.002;
 		
 	public static void main(String[] args)
