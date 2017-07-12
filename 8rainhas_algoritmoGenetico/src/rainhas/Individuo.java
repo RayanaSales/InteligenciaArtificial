@@ -10,8 +10,8 @@ public class Individuo
 	{
 		this.tabuleiroStr = tabuleiro;
 		CalcularAptidao();
-	}
-		
+	}	
+			
 	public int compareTo(Individuo i) 
 	{
 		int aptidao_i = i.CalcularAptidao();

@@ -66,7 +66,7 @@ public class Geracao
 		return sobreviventes;
 	}
 
-	public Individuo[] Crossover(Individuo[] sobreviventes)
+	public Individuo[] CrossoverEMutacao(Individuo[] sobreviventes)
 	{	
 		/*
 		 * GERA 500 FILHOS A PARTIR DOS 250 SOBREVIVENTES
@@ -115,6 +115,8 @@ public class Geracao
 		{
 			filhos = Mutacionar(filhos);
 		}
+		
+		filhos = Evolucao.Eletismo(Evolucao.GetUltimaGeracao().individuos, filhos);
 		
 		return filhos;
 	}

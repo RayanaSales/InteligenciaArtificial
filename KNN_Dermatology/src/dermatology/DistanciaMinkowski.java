@@ -2,7 +2,7 @@ package dermatology;
 
 public class DistanciaMinkowski extends Distancia
 {
-	int q = 2;
+	int q = 3;
 	
 	public DistanciaMinkowski(Tupla atual, Tupla teste)
 	{		

@@ -47,6 +47,12 @@ public class Classificador
 			distancias.add(distancia);
 		}
 		
+//		System.out.println("DISTANCIAS ANTES DE ORDENAR");
+//		for (Distancia distancia : distancias)
+//		{
+//			System.out.println("Valor: " + distancia.distancia + " Resposta real: " + distancia.treinamento.RESPOSTA_REAL.getNumVal());
+//		}
+		
 		//ordene a lista pela distancia
 		Collections.sort(distancias, new Comparator<Distancia>()
 		{
@@ -58,7 +64,7 @@ public class Classificador
 			}
 		});
 	}
-	
+		
 	private void MontarMatrizConfusao(Tupla teste)
 	{
 		// for (int k= 1; k <= 11 ; k = k + 2)
@@ -70,6 +76,11 @@ public class Classificador
 		for (int k= 1; k <= 11 ; k = k + 2)
 		{
 			List<Distancia> proximos = distancias.subList(0, k);
+			//System.out.println("DISTANCIAS DEPOIS DE ORDENAR - Para k = " + k);
+//			for (Distancia distancia : proximos)
+//			{
+//				System.out.println("Valor: " + distancia.distancia + " Resposta real: " + distancia.treinamento.RESPOSTA_REAL.getNumVal());
+//			}
 			Diagnostico resultadoClassificacao = AcharMaisComum(proximos);
 			teste.RESULTADO_CLASSIFICACAO = resultadoClassificacao;
 			Main.MATRIZ_CONFUSAO.InserirResultado(k, teste.RESPOSTA_REAL.getNumVal(), resultadoClassificacao.getNumVal());
@@ -92,6 +103,8 @@ public class Classificador
 			data = Arrays.stream(dataString).mapToInt(Integer::parseInt).toArray();
 			
 			Diagnostico diagnosticoReal = Diagnostico.values()[data[34] - 1]; //pq os elementos do diagnostico vao de 0 a 5. Mas no arquivo esta de 1 a 6
+			
+			data[33] = data[33] * 3 / 100;
 			
 			tupla = new Tupla(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], 
 					data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], 

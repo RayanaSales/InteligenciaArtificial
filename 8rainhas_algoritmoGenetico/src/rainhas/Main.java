@@ -2,7 +2,7 @@ package rainhas;
 
 public class Main
 {
-	public static int QUANTIDADE_GERACOES = 3000;
+	public static int QUANTIDADE_GERACOES = 20;
 	public static int TAMANHO_POPULACAO = 20;
 	public static double TAXA_MUTACA0 = 0.002;
 		
@@ -21,7 +21,7 @@ public class Main
 		while(Evolucao.GetUltimaGeracao().AvaliarIndividuos() && Evolucao.GetUltimaGeracao().id < Main.QUANTIDADE_GERACOES)
 		{
 			Individuo[] sobreviventes = Evolucao.GetUltimaGeracao().SelecaoNatural();
-			Evolucao.CriarNovaGeracao(sobreviventes);			
+			Evolucao.CriarNovaGeracao(sobreviventes);	
 		}		
 		Evolucao.ImprimirUltimaGeracao();
 	}

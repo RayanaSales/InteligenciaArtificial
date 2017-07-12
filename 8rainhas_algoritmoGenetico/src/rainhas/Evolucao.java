@@ -1,6 +1,7 @@
 package rainhas;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Evolucao
@@ -39,10 +40,41 @@ public class Evolucao
 		 *  		  
 		 * */
 		
-		Individuo[] novaPopulacao = GetUltimaGeracao().Crossover(sobreviventes);
+		Individuo[] novaPopulacao = GetUltimaGeracao().CrossoverEMutacao(sobreviventes);
 		Geracao geracao = new Geracao(GetUltimaGeracao().id + 1, novaPopulacao);
 		geracoes.add(geracao);		
 	}
+	
+	public static Individuo[] Eletismo(Individuo[] geracaoAnterior, Individuo[] individuosGeracaoAtual)
+	{
+		Individuo melhor = geracaoAnterior[0];	
+		int indexMelhor = 0;
+		Individuo pior = individuosGeracaoAtual[0];	
+		int indexPior = 0;
+		
+		for (int j = 0; j < individuosGeracaoAtual.length; j++)
+		{				
+			if(geracaoAnterior[j].CalcularAptidao() < melhor.CalcularAptidao())
+			{
+				melhor = geracaoAnterior[j];
+				indexMelhor = j;
+			}
+			
+			if(individuosGeracaoAtual[j].CalcularAptidao() > pior.CalcularAptidao())
+			{
+				pior = individuosGeracaoAtual[j];
+				indexPior = j;
+			}
+		}
+		
+		individuosGeracaoAtual[indexPior] = melhor;		
+		
+		return individuosGeracaoAtual;
+	}
+	
+		
+	
+	
 	
 	public static Geracao GetUltimaGeracao() 
 	{

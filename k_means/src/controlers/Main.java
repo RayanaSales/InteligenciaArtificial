@@ -1,51 +1,59 @@
-package kmeans;
+package controlers;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+
+import models.Amostra;
 
 public class Main
 {
+	public static int k = 3;
+	public static List<Amostra> amostras = new ArrayList<Amostra>();
+	
 	public static void main(String[] args)
 	{
 		PrepararAmbiente();
 		Classificador.Classificar();
-		Classificador.Imprimir();
 	}
 
 	public static void PrepararAmbiente()
 	{
+		//le arquivo
 		String line;
 		int id = 1;
 		Amostra amostra = null;
-		double[] data = null;
-
+		double[] data = null;		
+				
 		try
 		{
+			//criar grupos
+			GrupoControlador.getGrupoControlador().CriarGrupos(k);
+			
 			BufferedReader in = new BufferedReader(new FileReader("kmeans.data"));
 			while ((line = in.readLine()) != null)
 			{				
 				String[] dataString = line.split(";");
 				data = Arrays.stream(dataString).mapToDouble(Double::parseDouble).toArray();
 				
-				int grupoReal = (int) data[2];				
-				amostra = new Amostra(id, data[0], data[1], (grupoReal == 1 ? Classificador.grupo1 : Classificador.grupo2));
+				int grupoReal = (int) data[2];	
 				
-				//SORTEIA O GRUPO DA AMOSTRA
-				int valor_grupo = new Random().nextInt(3);
-				if(valor_grupo == 1)
+				int grupoClassificacao = new Random().nextInt(Main.k + 1);				
+				while(grupoClassificacao == 0)
 				{
-					Classificador.grupo1.amostras.add(amostra);
+					grupoClassificacao = new Random().nextInt(Main.k + 1);
 				}
-				else
-				{
-					Classificador.grupo2.amostras.add(amostra);
-				}				
-				id++;
+				
+				amostra = new Amostra(id++, data[0], data[1], grupoReal, grupoClassificacao);
+				Main.amostras.add(amostra);	
 			}
 			in.close();
+			
+			Classificador.getClassificador().CalcularCentros();
 		}
 		catch (IOException e)
 		{
