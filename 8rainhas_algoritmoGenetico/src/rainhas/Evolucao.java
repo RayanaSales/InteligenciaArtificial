@@ -65,10 +65,8 @@ public class Evolucao
 				pior = individuosGeracaoAtual[j];
 				indexPior = j;
 			}
-		}
-		
-		individuosGeracaoAtual[indexPior] = melhor;		
-		
+		}		
+		individuosGeracaoAtual[indexPior] = melhor;				
 		return individuosGeracaoAtual;
 	}
 	

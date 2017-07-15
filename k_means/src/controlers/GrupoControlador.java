@@ -3,6 +3,8 @@ package controlers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jfree.ui.RefineryUtilities;
+
 import models.Amostra;
 import models.Centro;
 import models.Grupo;
@@ -57,6 +59,16 @@ public class GrupoControlador
 		g.qtdAmostras++;
 	}
 	
+	public void ZerarCentroids()
+	{
+		for (Grupo grupo : grupos)
+		{
+			grupo.somaAtributo1 = 0;
+			grupo.somaAtributo2 = 0;
+			grupo.qtdAmostras = 0;
+		}
+	}
+	
 	public void FinalizarCalculoCentros()
 	{
 		for (Grupo grupo : grupos)
@@ -65,7 +77,7 @@ public class GrupoControlador
 			Centro c = CentroControlador.getCentroControlador().BuscarCentro(grupo.tipo);
 			//atualize ele			
 			c.valor1 = grupo.somaAtributo1 / grupo.qtdAmostras;
-			c.valor2 = grupo.somaAtributo2 / grupo.qtdAmostras;			
+			c.valor2 = grupo.somaAtributo2 / grupo.qtdAmostras;					
 		}
 	}
 	
@@ -85,6 +97,10 @@ public class GrupoControlador
 			}
 			System.out.println();
 			System.out.println();
-		}
+		}		
+		PlotarGrafico plotar = new PlotarGrafico("Rayana", "K-Means", CentroControlador.getCentroControlador().getCentros());
+		plotar.pack();
+		RefineryUtilities.centerFrameOnScreen(plotar);
+		plotar.setVisible(true);		
 	}
 }

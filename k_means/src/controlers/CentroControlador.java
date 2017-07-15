@@ -2,7 +2,9 @@ package controlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import models.Amostra;
 import models.Centro;
 import models.Grupo;
 
@@ -26,7 +28,7 @@ public class CentroControlador
 	
 	public void CriarCentro(Grupo grupo)
 	{
-		Centro c = new Centro(grupo);
+		Centro c = new Centro(grupo);			
 		centros.add(c);
 	}
 	
@@ -40,5 +42,10 @@ public class CentroControlador
 			}
 		}
 		return null;
+	}
+	
+	public List<Centro> getCentros()
+	{
+		return this.centros;
 	}
 }

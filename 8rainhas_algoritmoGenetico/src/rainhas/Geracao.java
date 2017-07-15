@@ -109,7 +109,8 @@ public class Geracao
 			
 			filhos[filhos_index++] = filho;
 			filhos[filhos_index++] = filha;
-		}
+			
+		} // fim crossover
 		
 		if(AplicarMutacao())
 		{

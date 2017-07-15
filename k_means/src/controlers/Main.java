@@ -12,7 +12,7 @@ import models.Amostra;
 
 public class Main
 {
-	public static int k = 3;
+	public static int k = 2;
 	public static List<Amostra> amostras = new ArrayList<Amostra>();
 	
 	public static void main(String[] args)
@@ -27,13 +27,13 @@ public class Main
 		String line;
 		int id = 1;
 		Amostra amostra = null;
-		double[] data = null;		
+		double[] data = null;	
+		
+		//criar grupos
+		GrupoControlador.getGrupoControlador().CriarGrupos(k);
 				
 		try
 		{
-			//criar grupos
-			GrupoControlador.getGrupoControlador().CriarGrupos(k);
-			
 			BufferedReader in = new BufferedReader(new FileReader("kmeans.data"));
 			while ((line = in.readLine()) != null)
 			{				
@@ -52,7 +52,6 @@ public class Main
 				Main.amostras.add(amostra);	
 			}
 			in.close();
-			
 			Classificador.getClassificador().CalcularCentros();
 		}
 		catch (IOException e)

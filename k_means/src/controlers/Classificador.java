@@ -8,6 +8,7 @@ import java.util.List;
 import models.Amostra;
 import models.Centro;
 import models.Distancia;
+import models.Grupo;
 
 public class Classificador
 {
@@ -32,7 +33,7 @@ public class Classificador
 		boolean houveTroca = true;
 		int trocas = 0;
 		
-		while(houveTroca && trocas < 100)
+		while(houveTroca && trocas <= 20)
 		{
 			houveTroca = ReajustarGrupos();
 			trocas++;
@@ -43,11 +44,12 @@ public class Classificador
 		{
 			amostra.Grupo_Classificacao.amostras.add(amostra);
 		}
+		
 		GrupoControlador.getGrupoControlador().Imprimir();
 	}
 	
 	public static void CalcularCentros()
-	{	
+	{			
 		//somatorio
 		for (Amostra amostra : Main.amostras)
 		{
@@ -69,7 +71,7 @@ public class Classificador
 	
 	public static boolean ReajustarGrupos()
 	{		
-		boolean houveTroca = true;	
+		boolean houveTroca = false;	
 		List<Distancia> distancias;
 		
 		for (Amostra amostra : Main.amostras)
@@ -96,9 +98,13 @@ public class Classificador
 			//se precisar se mover, mova-se
 			if(distancias.get(0).grupoTipo != amostra.Grupo_Classificacao.tipo)
 			{
+				houveTroca = true;
 				amostra.IrParaGrupo(distancias.get(0).grupoTipo);	
 			}	
 		}
+		
+		//zera centros e qtd de amostras em cada centro
+		GrupoControlador.getGrupoControlador().ZerarCentroids();
 		
 		CalcularCentros();		
 		return houveTroca;
