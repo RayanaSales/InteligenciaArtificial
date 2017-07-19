@@ -95,18 +95,28 @@ public class Classificador
 				}
 			});
 			
-			//se precisar se mover, mova-se
-			if(distancias.get(0).grupoTipo != amostra.Grupo_Classificacao.tipo)
+			try
+			{
+				// se precisar se mover, mova-se
+				if (distancias.get(0).grupoTipo != amostra.Grupo_Classificacao.tipo)
+				{
+					houveTroca = true;
+					amostra.IrParaGrupo(distancias.get(0).grupoTipo);
+					
+					//zera centros e qtd de amostras em cada centro
+					GrupoControlador.getGrupoControlador().ZerarCentroids();		
+					CalcularCentros();
+				}
+			}
+			catch (java.lang.NullPointerException e)
 			{
 				houveTroca = true;
-				amostra.IrParaGrupo(distancias.get(0).grupoTipo);	
-			}	
+				amostra.Grupo_Classificacao = GrupoControlador.getGrupoControlador().BuscarGrupo(distancias.get(0).grupoTipo) ;
+			}
 		}
 		
-		//zera centros e qtd de amostras em cada centro
-		GrupoControlador.getGrupoControlador().ZerarCentroids();
+				
 		
-		CalcularCentros();		
 		return houveTroca;
 	}	
 }

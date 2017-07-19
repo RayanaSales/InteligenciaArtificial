@@ -37,16 +37,16 @@ public class PlotarGrafico extends ApplicationFrame
 		renderer.setDotHeight(8);
 		renderer.setDotWidth(8);
 
-		renderer.setSeriesPaint(0, Color.BLACK);
-		renderer.setSeriesPaint(1, Color.RED);
-		renderer.setSeriesPaint(2, Color.YELLOW);
+		renderer.setSeriesPaint(0, Color.GREEN);
+		renderer.setSeriesPaint(1, Color.ORANGE);
+		renderer.setSeriesPaint(2, Color.RED);
 		renderer.setSeriesPaint(3, Color.BLUE);
-		renderer.setSeriesPaint(4, Color.GREEN);
-		renderer.setSeriesPaint(5, Color.MAGENTA);
+		renderer.setSeriesPaint(4, Color.CYAN);
+		renderer.setSeriesPaint(5, Color.YELLOW);
 		renderer.setSeriesPaint(6, Color.WHITE);
-		renderer.setSeriesPaint(7, Color.DARK_GRAY);
+		renderer.setSeriesPaint(7, Color.GRAY);
 		renderer.setSeriesPaint(8, Color.CYAN);
-		renderer.setSeriesPaint(9, Color.PINK);
+		renderer.setSeriesPaint(9, Color.BLACK);
 		 renderer.setSeriesStroke( 0 , new BasicStroke( 4.0f ) );
 		 renderer.setSeriesStroke( 1 , new BasicStroke( 3.0f ) );
 		 renderer.setSeriesStroke( 2 , new BasicStroke( 2.0f ) );

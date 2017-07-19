@@ -12,7 +12,7 @@ import models.Amostra;
 
 public class Main
 {
-	public static int k = 2;
+	public static int k = 5;
 	public static List<Amostra> amostras = new ArrayList<Amostra>();
 	
 	public static void main(String[] args)
@@ -52,7 +52,7 @@ public class Main
 				Main.amostras.add(amostra);	
 			}
 			in.close();
-			Classificador.getClassificador().CalcularCentros();
+			Classificador.getClassificador().CalcularCentros();			
 		}
 		catch (IOException e)
 		{
